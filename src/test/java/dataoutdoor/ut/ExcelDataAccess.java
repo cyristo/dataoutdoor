@@ -12,7 +12,7 @@ import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.contract.DataEngine;
 import dataoutdoor.engine.ExcelEngine;
 
-public class DataAccess {
+public class ExcelDataAccess {
 
 	@Test
 	public void should_get_correct_dataset_for_category_and_id() {
