@@ -10,7 +10,7 @@ Without Data Outdoor :
 * When I do something with that country
 * Then I should get this result
 
-With Data Outdoor
+With Data Outdoor:
 * Given the dataset COUNTRY:France
 * When I do something with that country
 * Then I should get this result
