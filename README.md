@@ -1,4 +1,5 @@
 # Simple data externalization engine for testing or other usage. 
+Feed Data Outdoor with the data source (path to Excel file), the data category (Excel sheet) and the dataset reference (either the row number or the cell value of the first column), then you will get the dataset in the form of a hashmap (row headers / row values). 
 
 ## BDD use case : instead of having data inside the test scenario, use Data Outdoor to reference an external dataset. 
 
