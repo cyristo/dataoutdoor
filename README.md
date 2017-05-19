@@ -5,8 +5,8 @@
 Without Data Outdoor :
 * Given the country name is France
 * And the country population is 64768389
-* And the country xxx is 547030
-* And the country xxx is 2.739 Trillion
+* And the country area is 547030
+* And the country GDP is 2.739 Trillion
 * When I do something with that country
 * Then I should get this result
 
