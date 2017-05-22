@@ -1,7 +1,7 @@
 package dataoutdoor.ut;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
@@ -12,7 +12,11 @@ import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataEngine;
 import dataoutdoor.engine.ExcelEngine;
 
-public class DataConvertion {
+
+
+
+
+public class TestDataConvertion {
 
 	@Test
 	public void test() {
@@ -34,9 +38,12 @@ public class DataConvertion {
 		}
 
 		assertFalse(exceptionThrown);
-
-		//TODO see how to validate json format
-		//assertEquals("", null, null);
+		String json = Utils.hashMaptoJson(dataset);
+		
+		System.out.println(json);
+		
+		assertTrue(Utils.isValidJson(json));
+		
 	}
 	
 

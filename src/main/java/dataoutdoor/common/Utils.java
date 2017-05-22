@@ -5,13 +5,16 @@ import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class Utils {
 
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	
 	public static String hashMaptoJson(HashMap<String, Object> map) {
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		
 		buf.append("{").append(LINE_SEPARATOR);
 		Iterator<String> iter = map.keySet().iterator();
@@ -20,15 +23,15 @@ public class Utils {
 			Object value = (Object) map.get(key);
 			buf.append("  "+"\""+key+"\": ");
 			if (isDouble(value) || isInteger(value)) {
-				buf.append(value+";");
+				buf.append(value+",");
 			} else {
-				buf.append("\""+value+"\";");
+				buf.append("\""+value+"\",");
 			}
 			buf.append(LINE_SEPARATOR);
 		}
 		buf.append("}");
 		String json = buf.toString();
-		int index = StringUtils.lastIndexOf(json, ";");
+		int index = StringUtils.lastIndexOf(json, ",");
 		json = json.substring(0, index) + json.substring(index+1);
 		return json;
 		
@@ -55,5 +58,22 @@ public class Utils {
 		}
 		return true;
 	}
+	
+	public static boolean isValidJson(String json) {
+		boolean valid = true;
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode rootNode = null;
+
+		try {
+			rootNode = mapper.readTree(json);
+		} catch (Exception e) {
+			System.out.println(e);
+			valid = false;
+			//throw new DataOutdoorException(e);
+		}
+
+		return valid;
+	}
+	
 	
 }
