@@ -23,11 +23,13 @@ public class TestExcelDataAccess {
 		String fileName = "src/test/resources/datasource.xls";
 				
 		DataEngine engine = new ExcelEngine();
-		HashMap<String, Object> dataset = null;
+		HashMap<String, Object> dataset1 = null;
+		HashMap<String, Object> dataset2 = null;
 		
 		try {
 			engine.setDataSource(fileName);
-			dataset = engine.getDatasetById(category, id);
+			dataset1 = engine.getDatasetById(category, id);
+			dataset2 = engine.getDatasetById(id);
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
 			exceptionThrown = true;
@@ -35,57 +37,9 @@ public class TestExcelDataAccess {
 
 		assertFalse(exceptionThrown);
 		
-		Double result = (Double) dataset.get("COUNTRY CODE");
+		Double result = (Double) dataset1.get("COUNTRY CODE");
 		assertEquals(33, result.intValue());
-	}
-	
-	@Test
-	public void should_get_correct_dataset_for_category_and_id_with_xlsx_file() {
-		
-		boolean exceptionThrown = false;
-		String category = "COUNTRY";
-		Object id = "France";
-		String fileName = "src/test/resources/datasource.xlsx";
-				
-		DataEngine engine = new ExcelEngine();
-		HashMap<String, Object> dataset = null;
-		
-		try {
-			engine.setDataSource(fileName);
-			dataset = engine.getDatasetById(category, id);
-		} catch (DataOutdoorException e) {
-			e.printStackTrace();
-			exceptionThrown = true;
-		}
-
-		assertFalse(exceptionThrown);
-		
-		Double result = (Double) dataset.get("COUNTRY CODE");
-		assertEquals(33, result.intValue());
-	}
-	
-	@Test
-	public void should_get_correct_dataset_for_category_and_row_num_with_xls_file() {
-		
-		boolean exceptionThrown = false;
-		String category = "COUNTRY";
-		int rowNum = 73;
-		String fileName = "src/test/resources/datasource.xls";
-				
-		DataEngine engine = new ExcelEngine();
-		HashMap<String, Object> dataset = null;
-				
-		try {
-			engine.setDataSource(fileName);
-			dataset = engine.getDatasetByRowNum(category, rowNum);
-		} catch (DataOutdoorException e) {
-			e.printStackTrace();
-			exceptionThrown = true;
-		}
-
-		assertFalse(exceptionThrown);
-		
-		Double result = (Double) dataset.get("COUNTRY CODE");
+		result = (Double) dataset2.get("COUNTRY CODE");
 		assertEquals(33, result.intValue());
 	}
 	
@@ -113,4 +67,30 @@ public class TestExcelDataAccess {
 		Double result = (Double) dataset.get("COUNTRY CODE");
 		assertEquals(33, result.intValue());
 	}
+	
+	@Test
+	public void should_get_cell_data_by_reference() {
+		
+		boolean exceptionThrown = false;
+		String sheetName = "COUNTRY";
+		String cellReference = "B74";
+		String fileName = "src/test/resources/datasource.xlsx";
+				
+		ExcelEngine engine = new ExcelEngine();
+		Object cellVal = null;
+		
+		try {
+			engine.setDataSource(fileName);
+			cellVal = engine.getCellValueByExcelReference(sheetName, cellReference);
+		} catch (DataOutdoorException e) {
+			e.printStackTrace();
+			exceptionThrown = true;
+		}
+
+		assertFalse(exceptionThrown);
+		
+		Double db = new Double((Double) cellVal);
+		assertEquals(33, db.intValue());
+	}
+	
 }
