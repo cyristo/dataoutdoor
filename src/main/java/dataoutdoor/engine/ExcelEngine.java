@@ -1,5 +1,6 @@
 package dataoutdoor.engine;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,7 +76,6 @@ public class ExcelEngine implements DataEngine {
 					for (int colNum = 0; colNum < nbColl; colNum++) {
 						Cell cell = row.getCell(colNum);
 						dataset.put(headers.get(colNum), getCellObject(cell));
-						//feedDataset(dataset, headers.get(colNum), cell);
 					}
 				}
 			}
@@ -209,13 +209,15 @@ public class ExcelEngine implements DataEngine {
 	}
 
 	private Workbook readFile(String filename) throws Exception {
-		FileInputStream fis = new FileInputStream(filename);
+		//FileInputStream fis = new FileInputStream(filename);
+		File f = new File(filename);
 		Workbook wb = null;
 		try {
-			wb = WorkbookFactory.create(fis);
+			wb = WorkbookFactory.create(f);
 		} finally {
-			fis.close();
+			//fis.close();
 		}
+		
 		return wb;
 	}
 
