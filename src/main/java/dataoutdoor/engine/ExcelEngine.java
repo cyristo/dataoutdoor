@@ -5,19 +5,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.contract.DataEngine;
 
 public class ExcelEngine implements DataEngine {
 
-	private HSSFWorkbook dataSource;
+	private Workbook dataSource;
 
 	/**
 	 * Get the dataset by its ID. 
@@ -100,7 +100,7 @@ public class ExcelEngine implements DataEngine {
 		//get the workBook 
 		try {
 			this.dataSource = readFile(dataSource.toString());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new DataOutdoorException(e);
 		}
 	}
@@ -144,14 +144,14 @@ public class ExcelEngine implements DataEngine {
 		return headers;
 	}
 
-	private HSSFWorkbook readFile(String filename) throws IOException {
+	private Workbook readFile(String filename) throws Exception {
 		FileInputStream fis = new FileInputStream(filename);
+		Workbook wb = null;
 		try {
-			return new HSSFWorkbook(fis);		
+			wb = WorkbookFactory.create(fis);
 		} finally {
 			fis.close();
 		}
+		return wb;
 	}
-
-	
 }
