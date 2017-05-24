@@ -1,9 +1,9 @@
 package dataoutdoor.ut;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,16 +30,16 @@ public class TestExcelDataAccess {
 	@Parameters(name = "Test with {0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] { 
-        	    {"src/test/resources/datasource.xls"}, {"src/test/resources/datasource.xlsx"}});
+        	    {"src/test/resources/datasource.xls"}, 
+        	    {"src/test/resources/datasource.xlsx"}});
     }
 	
 	@Test
-	public void should_get_correct_dataset_for_category_and_id_with_xls_file() {
+	public void should_get_correct_dataset_for_category_and_id() {
 		
 		boolean exceptionThrown = false;
 		String category = "COUNTRY";
 		Object id = "France";
-		//String fileName = "src/test/resources/datasource.xls";
 				
 		DataEngine engine = new ExcelEngine();
 		HashMap<String, Object> dataset1 = null;
@@ -57,18 +57,17 @@ public class TestExcelDataAccess {
 		assertFalse(exceptionThrown);
 		
 		Double result = (Double) dataset1.get("COUNTRY CODE");
-		assertEquals(33, result.intValue());
+		assertThat(result.intValue(), is(33));
 		result = (Double) dataset2.get("COUNTRY CODE");
-		assertEquals(33, result.intValue());
+		assertThat(result.intValue(), is(33));
 	}
 	
 	@Test
-	public void should_get_correct_dataset_for_category_and_row_num_with_xlsx_file() {
+	public void should_get_correct_dataset_for_category_and_row_num() {
 		
 		boolean exceptionThrown = false;
 		String category = "COUNTRY";
 		int rowNum = 73;
-		//String fileName = "src/test/resources/datasource.xlsx";
 		
 		DataEngine engine = new ExcelEngine();
 		HashMap<String, Object> dataset = null;
@@ -84,7 +83,7 @@ public class TestExcelDataAccess {
 		assertFalse(exceptionThrown);
 		
 		Double result = (Double) dataset.get("COUNTRY CODE");
-		assertEquals(33, result.intValue());
+		assertThat(result.intValue(), is(33));
 	}
 	
 	@Test
@@ -92,15 +91,20 @@ public class TestExcelDataAccess {
 		
 		boolean exceptionThrown = false;
 		String sheetName = "COUNTRY";
-		String cellReference = "B74";
-		//String fileName = "src/test/resources/datasource.xlsx";
+		String cellReference1 = "B74";
+		String cellReference2 = "A1";
+		String cellReference3 = "F241";
 				
 		ExcelEngine engine = new ExcelEngine();
-		Object cellVal = null;
+		Object cellVal1 = null;
+		Object cellVal2 = null;
+		Object cellVal3 = null;
 		
 		try {
 			engine.setDataSource(fileName);
-			cellVal = engine.getCellValueByExcelReference(sheetName, cellReference);
+			cellVal1 = engine.getCellByReference(sheetName, cellReference1);
+			cellVal2 = engine.getCellByReference(sheetName, cellReference2);
+			cellVal3 = engine.getCellByReference(sheetName, cellReference3);
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
 			exceptionThrown = true;
@@ -108,8 +112,37 @@ public class TestExcelDataAccess {
 
 		assertFalse(exceptionThrown);
 		
-		Double db = new Double((Double) cellVal);
-		assertEquals(33, db.intValue());
+		Double db = (Double) cellVal1;
+		assertThat(db.intValue(), is(33));
+		assertThat(cellVal2.toString(), is("COUNTRY"));
+		assertThat(cellVal3.toString(), is("10.48 Billion"));
 	}
 	
+	@Test
+	public void should_get_all_datasets() {
+		
+		boolean exceptionThrown = false;
+		String sheetName = "COUNTRY";
+				
+		ExcelEngine engine = new ExcelEngine();
+		Collection<Object[]> datasets = null;
+		
+		try {
+			engine.setDataSource(fileName);
+			datasets = engine.getAllDatasets(sheetName);
+		} catch (DataOutdoorException e) {
+			e.printStackTrace();
+			exceptionThrown = true;
+		}
+
+		assertFalse(exceptionThrown);
+		
+		assertThat(datasets.size(), is(240));
+		Object[] tab = datasets.toArray();
+		
+		Object[] row0 = (Object[]) tab[0];
+		Object[] row240 = (Object[]) tab[239];
+		assertThat(row0[0].toString(), is("Afghanistan"));
+		assertThat(row240[5].toString(), is("10.48 Billion"));
+	}
 }

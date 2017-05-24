@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -20,6 +21,7 @@ import dataoutdoor.contract.DataEngine;
 public class ExcelEngine implements DataEngine {
 
 	private Workbook dataSource;
+	private ArrayList<String> headers;
 
 	/**
 	 * Set the Excel Workbook as the datasource for the instance
@@ -35,6 +37,10 @@ public class ExcelEngine implements DataEngine {
 		}
 	}
 
+	public Collection<String> getHeaders() {
+		return headers;
+	}
+	
 	/**
 	 * Get the dataset by its ID, for the first sheet
 	 * @param id cell value of the first column
@@ -53,23 +59,24 @@ public class ExcelEngine implements DataEngine {
 	 */
 	public HashMap<String, Object> getDatasetById(String category, Object id) throws DataOutdoorException {
 
+		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
+
 		//object returned
 		HashMap<String, Object> dataset = new HashMap<String, Object>();
-		if (dataSource == null) return dataset;
-
+		
 		//get the sheet 
 		int index = 0;
 		if (category != null) index = dataSource.getSheetIndex(category);
 		Sheet sheet = dataSource.getSheetAt(index);
 
-		//get the header row
-		ArrayList<String> headers = getHeaderRow(sheet);
+		//set the header row
+		setHeaderRow(sheet);
 
 		//get the row by its id and feed the dataset
 		int nbColl = headers.size();
 		int rowStart = sheet.getFirstRowNum();
 		int rowEnd = sheet.getLastRowNum();
-		for (int rowNum = rowStart+1; rowNum < rowEnd; rowNum++) {
+		for (int rowNum = rowStart+1; rowNum <= rowEnd; rowNum++) {
 			Row row = sheet.getRow(rowNum);
 			if (row != null) {
 				if (row.getCell(0) != null && row.getCell(0).getStringCellValue().equals(id)) {
@@ -104,17 +111,18 @@ public class ExcelEngine implements DataEngine {
 	 */
 	public HashMap<String, Object> getDatasetByRowNum(String category, int rowNum) throws DataOutdoorException {
 
+		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
+		
 		//object returned
 		HashMap<String, Object> dataset = new HashMap<String, Object>();
-		if (dataSource == null) return dataset;
-
+		
 		//get the sheet 
 		int index = 0;
 		if (category != null) index = dataSource.getSheetIndex(category);
 		Sheet sheet = dataSource.getSheetAt(index);
 
-		//get the header row
-		ArrayList<String> headers = getHeaderRow(sheet);
+		//set the header row
+		setHeaderRow(sheet);
 
 		//get the row by its number and feed the dataset
 		int nbColl = headers.size();
@@ -134,18 +142,22 @@ public class ExcelEngine implements DataEngine {
 	 * Get the cell content by its Excel reference (A1, BC27, ..), for the first sheet
 	 * @param cellReference the cell reference
 	 * @return the value as an object
+	 * @throws DataOutdoorException 
 	 */
-	public Object getCellValueByExcelReference(String cellReference) {
-		return getCellValueByExcelReference(null, cellReference);
+	public Object getCellByReference(String cellReference) throws DataOutdoorException {
+		return getCellByReference(null, cellReference);
 	}
 	/**
 	 * Get the cell content by its Excel reference (A1, BC27, ..)
 	 * @param sheetName name of the sheet
 	 * @param cellReference the cell reference
 	 * @return the value as an object
+	 * @throws DataOutdoorException 
 	 */
-	public Object getCellValueByExcelReference(String sheetName, String cellReference) {
+	public Object getCellByReference(String sheetName, String cellReference) throws DataOutdoorException {
 
+		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
+		
 		CellReference ref = new CellReference(cellReference);
 
 		//get the sheet 
@@ -155,7 +167,7 @@ public class ExcelEngine implements DataEngine {
 
 		//Get the row
 		Row row = sheet.getRow(ref.getRow());
-		
+
 		//Get the cell
 		Cell cell = null;
 		if (row != null) {
@@ -165,7 +177,54 @@ public class ExcelEngine implements DataEngine {
 		Object obj = getCellObject(cell);
 		return obj;
 	}
+	/**
+	 * Get all datasets for the first sheet
+	 * @return
+	 * @throws DataOutdoorException
+	 */
+	public Collection<Object[]> getAllDatasets() throws DataOutdoorException {
+		return getAllDatasets(null);
+	}
+	/**
+	 * Get all datasets for the sheet
+	 * @param sheetName
+	 * @return
+	 * @throws DataOutdoorException
+	 */
+	public Collection<Object[]> getAllDatasets(String sheetName) throws DataOutdoorException {
 
+		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
+		
+		//object returned
+		Collection<Object[]> datasets = new ArrayList<Object[]>();
+		
+		//get the sheet 
+		int index = 0;
+		if (sheetName != null) index = dataSource.getSheetIndex(sheetName);
+		Sheet sheet = dataSource.getSheetAt(index);
+
+		//set the header row
+		setHeaderRow(sheet);
+	
+		//get the row by its id and feed the dataset
+		int nbColl = headers.size();
+		int rowStart = sheet.getFirstRowNum();
+		int rowEnd = sheet.getLastRowNum();
+		for (int rowNum = rowStart+1; rowNum <= rowEnd; rowNum++) {
+			Row row = sheet.getRow(rowNum);
+			if (row != null) {
+				if (row.getCell(0) != null) {
+					ArrayList<Object> rowList = new ArrayList<Object>();	
+					for (int colNum = 0; colNum < nbColl; colNum++) {
+						Cell cell = row.getCell(colNum);
+						rowList.add(getCellObject(cell));
+					}
+					datasets.add(rowList.toArray());
+				}
+			}
+		}
+		return datasets;
+	}
 
 	private Object getCellObject(Cell cell) {
 		Object ret = null;
@@ -196,8 +255,8 @@ public class ExcelEngine implements DataEngine {
 		return ret;
 	}
 
-	private ArrayList<String> getHeaderRow(Sheet sheet) {
-		ArrayList<String> headers = new ArrayList<String>();
+	private void setHeaderRow(Sheet sheet) {
+		headers = new ArrayList<String>();
 		Row headerRow = sheet.getRow(0);
 		int colStart = headerRow.getFirstCellNum();
 		int colEnd = headerRow.getLastCellNum();
@@ -205,21 +264,10 @@ public class ExcelEngine implements DataEngine {
 			Cell c = headerRow.getCell(colNum);
 			headers.add(c.getStringCellValue());
 		}
-		return headers;
 	}
 
 	private Workbook readFile(String filename) throws Exception {
-		//FileInputStream fis = new FileInputStream(filename);
-		File f = new File(filename);
-		Workbook wb = null;
-		try {
-			wb = WorkbookFactory.create(f);
-		} finally {
-			//fis.close();
-		}
-		
-		return wb;
+		return WorkbookFactory.create(new File(filename));
 	}
-
 
 }
