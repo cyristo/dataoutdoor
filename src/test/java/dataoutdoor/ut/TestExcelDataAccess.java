@@ -4,23 +4,42 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.contract.DataEngine;
 import dataoutdoor.engine.ExcelEngine;
 
+@RunWith(Parameterized.class)
 public class TestExcelDataAccess {
 
+	private String fileName;
+	
+	public TestExcelDataAccess(String fileName) {
+		super();
+		this.fileName = fileName;
+	}
+	
+	@Parameters(name = "Test with {0}")
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] { 
+        	    {"src/test/resources/datasource.xls"}, {"src/test/resources/datasource.xlsx"}});
+    }
+	
 	@Test
 	public void should_get_correct_dataset_for_category_and_id_with_xls_file() {
 		
 		boolean exceptionThrown = false;
 		String category = "COUNTRY";
 		Object id = "France";
-		String fileName = "src/test/resources/datasource.xls";
+		//String fileName = "src/test/resources/datasource.xls";
 				
 		DataEngine engine = new ExcelEngine();
 		HashMap<String, Object> dataset1 = null;
@@ -49,7 +68,7 @@ public class TestExcelDataAccess {
 		boolean exceptionThrown = false;
 		String category = "COUNTRY";
 		int rowNum = 73;
-		String fileName = "src/test/resources/datasource.xlsx";
+		//String fileName = "src/test/resources/datasource.xlsx";
 		
 		DataEngine engine = new ExcelEngine();
 		HashMap<String, Object> dataset = null;
@@ -74,7 +93,7 @@ public class TestExcelDataAccess {
 		boolean exceptionThrown = false;
 		String sheetName = "COUNTRY";
 		String cellReference = "B74";
-		String fileName = "src/test/resources/datasource.xlsx";
+		//String fileName = "src/test/resources/datasource.xlsx";
 				
 		ExcelEngine engine = new ExcelEngine();
 		Object cellVal = null;

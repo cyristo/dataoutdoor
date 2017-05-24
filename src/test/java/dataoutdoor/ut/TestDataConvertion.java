@@ -6,15 +6,12 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataEngine;
 import dataoutdoor.engine.ExcelEngine;
-
-
-
-
 
 public class TestDataConvertion {
 
