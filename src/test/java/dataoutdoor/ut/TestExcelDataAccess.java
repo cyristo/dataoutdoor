@@ -41,14 +41,17 @@ public class TestExcelDataAccess {
 		String category = "COUNTRY";
 		Object id = "France";
 				
-		DataEngine engine = new ExcelEngine();
+		ExcelEngine engine = new ExcelEngine();
 		HashMap<String, Object> dataset1 = null;
 		HashMap<String, Object> dataset2 = null;
+		HashMap<String, Object> dataset3 = null;
 		
 		try {
 			engine.setDataSource(fileName);
 			dataset1 = engine.getDatasetById(category, id);
 			dataset2 = engine.getDatasetById(id);
+			engine.setIdColumnIndex(2);
+			dataset3 = engine.getDatasetById("BS / BHS");
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
 			exceptionThrown = true;
@@ -58,8 +61,11 @@ public class TestExcelDataAccess {
 		
 		Double result = (Double) dataset1.get("COUNTRY CODE");
 		assertThat(result.intValue(), is(33));
+		
 		result = (Double) dataset2.get("COUNTRY CODE");
 		assertThat(result.intValue(), is(33));
+		
+		assertThat(dataset3.get("COUNTRY CODE").toString(), is("1-242"));
 	}
 	
 	@Test
@@ -119,17 +125,20 @@ public class TestExcelDataAccess {
 	}
 	
 	@Test
-	public void should_get_all_datasets() {
+	public void should_get_dataset_list() {
 		
 		boolean exceptionThrown = false;
 		String sheetName = "COUNTRY";
 				
 		ExcelEngine engine = new ExcelEngine();
-		Collection<Object[]> datasets = null;
+		Collection<Object[]> allDatasets = null;
+		Collection<Object[]> filteredDatasets = null;
 		
 		try {
 			engine.setDataSource(fileName);
-			datasets = engine.getAllDatasets(sheetName);
+			allDatasets = engine.getDatasets(sheetName);
+			engine.setIdFilter("Ca.*");
+			filteredDatasets = engine.getDatasets(sheetName);
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
 			exceptionThrown = true;
@@ -137,12 +146,15 @@ public class TestExcelDataAccess {
 
 		assertFalse(exceptionThrown);
 		
-		assertThat(datasets.size(), is(240));
-		Object[] tab = datasets.toArray();
+		assertThat(allDatasets.size(), is(240));
+		Object[] tab = allDatasets.toArray();
 		
 		Object[] row0 = (Object[]) tab[0];
 		Object[] row240 = (Object[]) tab[239];
 		assertThat(row0[0].toString(), is("Afghanistan"));
 		assertThat(row240[5].toString(), is("10.48 Billion"));
+		
+		assertThat(filteredDatasets.size(), is(5));
+		
 	}
 }

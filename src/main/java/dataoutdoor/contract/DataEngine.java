@@ -1,6 +1,5 @@
 package dataoutdoor.contract;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -18,8 +17,8 @@ public interface DataEngine {
 	
 	public HashMap<String, Object> getDatasetByRowNum(String category, int rowNum) throws DataOutdoorException;
 	
-	public Collection<Object[]> getAllDatasets() throws DataOutdoorException;
+	public Collection<Object[]> getDatasets() throws DataOutdoorException;
 	
-	public Collection<Object[]> getAllDatasets(String category) throws DataOutdoorException;
+	public Collection<Object[]> getDatasets(String category) throws DataOutdoorException;
 
 }

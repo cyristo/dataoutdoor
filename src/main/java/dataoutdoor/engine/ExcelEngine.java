@@ -1,7 +1,6 @@
 package dataoutdoor.engine;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,8 +19,10 @@ import dataoutdoor.contract.DataEngine;
 
 public class ExcelEngine implements DataEngine {
 
-	private Workbook dataSource;
-	private ArrayList<String> headers;
+	private Workbook dataSource = null;
+	private ArrayList<String> headers = null;
+	private int idColumnIndex = 0;
+	private String idFilter = null;
 
 	/**
 	 * Set the Excel Workbook as the datasource for the instance
@@ -31,19 +32,38 @@ public class ExcelEngine implements DataEngine {
 	public void setDataSource(Object dataSource) throws DataOutdoorException {
 		//get the workBook 
 		try {
-			this.dataSource = readFile(dataSource.toString());
+			this.dataSource = WorkbookFactory.create(new File(dataSource.toString()));
 		} catch (Exception e) {
 			throw new DataOutdoorException(e);
 		}
 	}
+	/**
+	 * Set the index for the column to be considered as id for the rows
+	 * @param idCol
+	 */
+	public void setIdColumnIndex(int idColumnIndex) {
+		this.idColumnIndex = idColumnIndex;
+	}
 
+	/**
+	 * Set the filter to be used on Id column when retrieving the dataset list
+	 * @param idFilter regex
+	 */
+	public void setIdFilter(String idFilter) {
+		this.idFilter = idFilter;
+	}
+
+	/**
+	 * Get the header row (first row)
+	 * @return
+	 */
 	public Collection<String> getHeaders() {
 		return headers;
 	}
-	
+
 	/**
 	 * Get the dataset by its ID, for the first sheet
-	 * @param id cell value of the first column
+	 * @param cell value of the column set to be the id column (default is first column)
 	 * @return the row
 	 * @throws IOException
 	 */
@@ -51,9 +71,9 @@ public class ExcelEngine implements DataEngine {
 		return getDatasetById(null, id);
 	}
 	/**
-	 * Get the dataset by its ID. 
-	 * @param category name of the sheet
-	 * @param id cell value of the first column
+	 * Get the dataset by its ID
+	 * @param name of the sheet
+	 * @param cell value of the column set to be the id column (default is first column)
 	 * @return the row
 	 * @throws IOException
 	 */
@@ -63,7 +83,7 @@ public class ExcelEngine implements DataEngine {
 
 		//object returned
 		HashMap<String, Object> dataset = new HashMap<String, Object>();
-		
+
 		//get the sheet 
 		int index = 0;
 		if (category != null) index = dataSource.getSheetIndex(category);
@@ -79,7 +99,7 @@ public class ExcelEngine implements DataEngine {
 		for (int rowNum = rowStart+1; rowNum <= rowEnd; rowNum++) {
 			Row row = sheet.getRow(rowNum);
 			if (row != null) {
-				if (row.getCell(0) != null && row.getCell(0).getStringCellValue().equals(id)) {
+				if (row.getCell(idColumnIndex) != null && row.getCell(idColumnIndex).getStringCellValue().equals(id)) {
 					for (int colNum = 0; colNum < nbColl; colNum++) {
 						Cell cell = row.getCell(colNum);
 						dataset.put(headers.get(colNum), getCellObject(cell));
@@ -112,10 +132,10 @@ public class ExcelEngine implements DataEngine {
 	public HashMap<String, Object> getDatasetByRowNum(String category, int rowNum) throws DataOutdoorException {
 
 		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
-		
+
 		//object returned
 		HashMap<String, Object> dataset = new HashMap<String, Object>();
-		
+
 		//get the sheet 
 		int index = 0;
 		if (category != null) index = dataSource.getSheetIndex(category);
@@ -157,7 +177,7 @@ public class ExcelEngine implements DataEngine {
 	public Object getCellByReference(String sheetName, String cellReference) throws DataOutdoorException {
 
 		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
-		
+
 		CellReference ref = new CellReference(cellReference);
 
 		//get the sheet 
@@ -178,26 +198,26 @@ public class ExcelEngine implements DataEngine {
 		return obj;
 	}
 	/**
-	 * Get all datasets for the first sheet
+	 * Get all datasets for the first sheet. If filters are set, then get all datasets that match the filters
 	 * @return
 	 * @throws DataOutdoorException
 	 */
-	public Collection<Object[]> getAllDatasets() throws DataOutdoorException {
-		return getAllDatasets(null);
+	public Collection<Object[]> getDatasets() throws DataOutdoorException {
+		return getDatasets(null);
 	}
 	/**
-	 * Get all datasets for the sheet
+	 * Get all datasets for the sheet. If filters are set, then get all datasets that match the filters
 	 * @param sheetName
 	 * @return
 	 * @throws DataOutdoorException
 	 */
-	public Collection<Object[]> getAllDatasets(String sheetName) throws DataOutdoorException {
+	public Collection<Object[]> getDatasets(String sheetName) throws DataOutdoorException {
 
 		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
-		
+
 		//object returned
 		Collection<Object[]> datasets = new ArrayList<Object[]>();
-		
+
 		//get the sheet 
 		int index = 0;
 		if (sheetName != null) index = dataSource.getSheetIndex(sheetName);
@@ -205,7 +225,7 @@ public class ExcelEngine implements DataEngine {
 
 		//set the header row
 		setHeaderRow(sheet);
-	
+
 		//get the row by its id and feed the dataset
 		int nbColl = headers.size();
 		int rowStart = sheet.getFirstRowNum();
@@ -213,7 +233,7 @@ public class ExcelEngine implements DataEngine {
 		for (int rowNum = rowStart+1; rowNum <= rowEnd; rowNum++) {
 			Row row = sheet.getRow(rowNum);
 			if (row != null) {
-				if (row.getCell(0) != null) {
+				if (row.getCell(0) != null && matchFilter(row.getCell(idColumnIndex).getStringCellValue())) {
 					ArrayList<Object> rowList = new ArrayList<Object>();	
 					for (int colNum = 0; colNum < nbColl; colNum++) {
 						Cell cell = row.getCell(colNum);
@@ -226,6 +246,14 @@ public class ExcelEngine implements DataEngine {
 		return datasets;
 	}
 
+	private boolean matchFilter(String value) {
+		boolean matchFilter = true;
+		if (idFilter != null) {
+			matchFilter = value.matches(idFilter);
+		}
+		return matchFilter;
+	}
+	
 	private Object getCellObject(Cell cell) {
 		Object ret = null;
 		if (cell == null) return ret;
@@ -264,10 +292,6 @@ public class ExcelEngine implements DataEngine {
 			Cell c = headerRow.getCell(colNum);
 			headers.add(c.getStringCellValue());
 		}
-	}
-
-	private Workbook readFile(String filename) throws Exception {
-		return WorkbookFactory.create(new File(filename));
 	}
 
 }
