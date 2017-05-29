@@ -38,8 +38,7 @@ public class TestExcelDataLoader {
     }
 	
 	@Test
-	public void should_create_an_excel_file_with_one_dataset() {
-		
+	public void should_save_a_new_excel_file() {
 		
 		Date date = new Date();
 		boolean exceptionThrown = false;
@@ -48,10 +47,11 @@ public class TestExcelDataLoader {
 		try {
 			engine.setDataDestination(fileName);
 		} catch (DataOutdoorException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			exceptionThrown = true;
 		}
 		
+		assertFalse(exceptionThrown);
 		
 		HashMap<String, Object> dataset = new HashMap<String, Object>();
 		dataset.put("COL1", "simple value");
@@ -59,13 +59,13 @@ public class TestExcelDataLoader {
 		try {
 			engine.save();
 		} catch (DataOutdoorException e) {
+			e.printStackTrace();
 			exceptionThrown = true;
 		}
 		
 		assertFalse(exceptionThrown);
 
 		assertTrue(FileUtils.isFileNewer(new File(fileName), date));
-		//fileUtils.
 		
 	}
 
