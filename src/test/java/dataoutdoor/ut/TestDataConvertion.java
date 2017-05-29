@@ -14,8 +14,8 @@ import org.junit.runners.Parameterized.Parameters;
 
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
-import dataoutdoor.contract.DataEngine;
-import dataoutdoor.engine.ExcelEngine;
+import dataoutdoor.contract.DataExtractEngine;
+import dataoutdoor.engine.ExcelExtractEngine;
 
 @RunWith(Parameterized.class)
 public class TestDataConvertion {
@@ -41,12 +41,13 @@ public class TestDataConvertion {
 		String category = "COUNTRY";
 		Object id = "France";
 				
-		DataEngine engine = new ExcelEngine();
+		DataExtractEngine engine = new ExcelExtractEngine();
 		HashMap<String, Object> dataset = null;
 		
 		try {
 			engine.setDataSource(fileName);
-			dataset = engine.getDatasetById(category, id);
+			engine.setDataCategory(category);
+			dataset = engine.getDatasetById(id);
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
 			exceptionThrown = true;

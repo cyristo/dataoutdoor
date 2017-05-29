@@ -14,15 +14,15 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import dataoutdoor.common.DataOutdoorException;
-import dataoutdoor.contract.DataEngine;
-import dataoutdoor.engine.ExcelEngine;
+import dataoutdoor.contract.DataExtractEngine;
+import dataoutdoor.engine.ExcelExtractEngine;
 
 @RunWith(Parameterized.class)
-public class TestExcelDataAccess {
+public class TestExcelDataExtractor {
 
 	private String fileName;
 	
-	public TestExcelDataAccess(String fileName) {
+	public TestExcelDataExtractor(String fileName) {
 		super();
 		this.fileName = fileName;
 	}
@@ -41,16 +41,17 @@ public class TestExcelDataAccess {
 		String category = "COUNTRY";
 		Object id = "France";
 				
-		ExcelEngine engine = new ExcelEngine();
+		DataExtractEngine engine = new ExcelExtractEngine();
 		HashMap<String, Object> dataset1 = null;
 		HashMap<String, Object> dataset2 = null;
 		HashMap<String, Object> dataset3 = null;
 		
 		try {
 			engine.setDataSource(fileName);
-			dataset1 = engine.getDatasetById(category, id);
+			engine.setDataCategory(category);
+			dataset1 = engine.getDatasetById(id);
 			dataset2 = engine.getDatasetById(id);
-			engine.setIdColumnIndex(2);
+			engine.setDataIdCategory("2");
 			dataset3 = engine.getDatasetById("BS / BHS");
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
@@ -75,12 +76,13 @@ public class TestExcelDataAccess {
 		String category = "COUNTRY";
 		int rowNum = 73;
 		
-		DataEngine engine = new ExcelEngine();
+		DataExtractEngine engine = new ExcelExtractEngine();
 		HashMap<String, Object> dataset = null;
 				
 		try {
 			engine.setDataSource(fileName);
-			dataset = engine.getDatasetByRowNum(category, rowNum);
+			engine.setDataCategory(category);
+			dataset = engine.getDatasetByRowNum(rowNum);
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
 			exceptionThrown = true;
@@ -101,16 +103,18 @@ public class TestExcelDataAccess {
 		String cellReference2 = "A1";
 		String cellReference3 = "F241";
 				
-		ExcelEngine engine = new ExcelEngine();
+		DataExtractEngine engine = new ExcelExtractEngine();
 		Object cellVal1 = null;
 		Object cellVal2 = null;
 		Object cellVal3 = null;
 		
 		try {
 			engine.setDataSource(fileName);
-			cellVal1 = engine.getCellByReference(sheetName, cellReference1);
-			cellVal2 = engine.getCellByReference(sheetName, cellReference2);
-			cellVal3 = engine.getCellByReference(sheetName, cellReference3);
+			engine.setDataCategory(sheetName);
+			cellVal1 = engine.getDataByReference(cellReference1);
+			cellVal2 = engine.getDataByReference(cellReference2);
+			engine.setDataCategory(null);
+			cellVal3 = engine.getDataByReference(cellReference3);
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
 			exceptionThrown = true;
@@ -130,15 +134,16 @@ public class TestExcelDataAccess {
 		boolean exceptionThrown = false;
 		String sheetName = "COUNTRY";
 				
-		ExcelEngine engine = new ExcelEngine();
+		DataExtractEngine engine = new ExcelExtractEngine();
 		Collection<Object[]> allDatasets = null;
 		Collection<Object[]> filteredDatasets = null;
 		
 		try {
 			engine.setDataSource(fileName);
-			allDatasets = engine.getDatasets(sheetName);
-			engine.setIdFilter("Ca.*");
-			filteredDatasets = engine.getDatasets(sheetName);
+			engine.setDataCategory(sheetName);
+			allDatasets = engine.getDatasets();
+			engine.setDataIdFilter("Ca.*");
+			filteredDatasets = engine.getDatasets();
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
 			exceptionThrown = true;
