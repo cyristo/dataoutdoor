@@ -130,7 +130,7 @@ public class TestExcelDataExtractor {
 	}
 	
 	@Test
-	public void should_get_dataset_list() {
+	public void should_get_data_collection() {
 		
 		boolean exceptionThrown = false;
 		String sheetName = "COUNTRY";
@@ -138,6 +138,41 @@ public class TestExcelDataExtractor {
 		DataExtractEngine engine = new ExcelExtractEngine();
 		Collection<Object[]> allDatasets = null;
 		Collection<Object[]> filteredDatasets = null;
+		
+		try {
+			engine.setDataSource(fileName);
+			engine.setDataCategory(sheetName);
+			allDatasets = engine.getDataTab();
+			engine.setDataIdFilter("Ca.*");
+			filteredDatasets = engine.getDataTab();
+		} catch (DataOutdoorException e) {
+			e.printStackTrace();
+			exceptionThrown = true;
+		}
+
+		assertFalse(exceptionThrown);
+		
+		assertThat(allDatasets.size(), is(240));
+		Object[] tab = allDatasets.toArray();
+		
+		Object[] row0 = (Object[]) tab[0];
+		Object[] row240 = (Object[]) tab[239];
+		assertThat(row0[0].toString(), is("Afghanistan"));
+		assertThat(row240[5].toString(), is("10.48 Billion"));
+		
+		assertThat(filteredDatasets.size(), is(5));
+		
+	}
+	
+	@Test
+	public void should_get_datasets() {
+		
+		boolean exceptionThrown = false;
+		String sheetName = "COUNTRY";
+				
+		DataExtractEngine engine = new ExcelExtractEngine();
+		LinkedHashMap<Integer, LinkedHashMap<String, Object>> allDatasets = null;
+		LinkedHashMap<Integer, LinkedHashMap<String, Object>>filteredDatasets = null;
 		
 		try {
 			engine.setDataSource(fileName);
@@ -153,12 +188,11 @@ public class TestExcelDataExtractor {
 		assertFalse(exceptionThrown);
 		
 		assertThat(allDatasets.size(), is(240));
-		Object[] tab = allDatasets.toArray();
 		
-		Object[] row0 = (Object[]) tab[0];
-		Object[] row240 = (Object[]) tab[239];
-		assertThat(row0[0].toString(), is("Afghanistan"));
-		assertThat(row240[5].toString(), is("10.48 Billion"));
+		LinkedHashMap<String, Object> row0 = allDatasets.get(0);
+		LinkedHashMap<String, Object> row240 = allDatasets.get(239);
+		assertThat(row0.get("COUNTRY").toString(), is("Afghanistan"));
+		assertThat(row240.get("GDP $USD").toString(), is("10.48 Billion"));
 		
 		assertThat(filteredDatasets.size(), is(5));
 		

@@ -29,8 +29,9 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 	private Workbook workbook = null;
 	private String dataDestination = null;
-	private Sheet dataSheet;
-
+	private Sheet dataSheet = null;
+	private String sheetName = "Generated Data Outdoor";
+	
 	public void setDataDestination(Object dataDestination) throws DataOutdoorException {
 
 		this.dataDestination = dataDestination.toString();
@@ -41,23 +42,17 @@ public class ExcelLoadEngine implements DataLoadEngine {
 			workbook = new HSSFWorkbook();
 		}
 
-
-		dataSheet = workbook.createSheet("Generated sheet1");
-
+		dataSheet = workbook.createSheet(sheetName);
 	}
 
 	public void setCategoryDestination(String dataCategory) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setDataModel(Collection<String> dataModel) {
-		Row row = dataSheet.createRow(0);
-		int i = 0;
-		for (Iterator<String> iterator = dataModel.iterator(); iterator.hasNext();) {
-			row.createCell(i++).setCellValue((String) iterator.next());
+		if (dataSheet != null) {
+			workbook.removeSheetAt(workbook.getSheetIndex(sheetName));
+			sheetName = dataCategory;
+			dataSheet = workbook.createSheet(sheetName);
+		} else {
+			sheetName = dataCategory;
 		}
-
 	}
 
 	public void setDatasetTransformer(DatasetTransformer transformer) {
@@ -73,21 +68,19 @@ public class ExcelLoadEngine implements DataLoadEngine {
 		if (lastRowNum == 0) setDataModel(keys);
 
 		Row row = dataSheet.createRow(lastRowNum+1);
+		CellStyle style;
+	    DataFormat format = workbook.createDataFormat();
 
 		int i = 0;
 		for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
 			Object value = dataset.get(iterator.next());
 			if (value instanceof Double) {
-				CellStyle style;
-			    DataFormat format = workbook.createDataFormat();
 				Cell cell = row.createCell(i++);
 				cell.setCellValue((Double) value);
 			    style = workbook.createCellStyle();
 			    style.setDataFormat(format.getFormat("0.00"));
 			    cell.setCellStyle(style);
 			} else if (value instanceof Integer) {
-				CellStyle style;
-			    DataFormat format = workbook.createDataFormat();
 				Cell cell = row.createCell(i++);
 				cell.setCellValue((Integer) value);
 			    style = workbook.createCellStyle();
@@ -106,15 +99,16 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 	}
 
-	public void addDatasets(Collection<Object[]> datasets) {
-		// TODO Auto-generated method stub
+	public void setDataModel(Collection<String> headers) {
+		Row row = dataSheet.createRow(0);
+		int i = 0;
+		for (Iterator<String> iterator = headers.iterator(); iterator.hasNext();) {
+			row.createCell(i++).setCellValue((String) iterator.next());
+		}
 
 	}
+	
 
-	public void updateDataByReference(Object dataReference, Object data) {
-		// TODO Auto-generated method stub
-
-	}
 
 	public void save() throws DataOutdoorException {
 		FileOutputStream fileOut = null;
@@ -137,6 +131,8 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 
 	}
+
+	
 
 
 }

@@ -83,7 +83,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	public Collection<String> getDataModel() {
 		return headers;
 	}
-
+	
 	/**
 	 * Get the dataset by its ID
 	 * @param cell value of the column set to be the id column (default is first column)
@@ -178,11 +178,11 @@ public class ExcelExtractEngine implements DataExtractEngine {
 		return obj;
 	}
 	/**
-	 * Get all datasets for the first sheet. If filters are set, then get all datasets that match the filters
+	 * Get all data for the sheet. If filters are set, then get all datasets that match the filters
 	 * @return
 	 * @throws DataOutdoorException
 	 */
-	public Collection<Object[]> getDatasets() throws DataOutdoorException {
+	public Collection<Object[]> getDataTab() throws DataOutdoorException {
 
 		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
 
@@ -212,6 +212,35 @@ public class ExcelExtractEngine implements DataExtractEngine {
 		return datasets;
 	}
 
+	public LinkedHashMap<Integer, LinkedHashMap<String, Object>> getDatasets() throws DataOutdoorException {
+		
+		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
+
+		//object returned
+		LinkedHashMap<Integer, LinkedHashMap<String, Object>> datasets = new LinkedHashMap<Integer, LinkedHashMap<String, Object>>() ;
+
+		//set the sheet if not done
+		if (dataSheet == null) setDataCategory(null);
+
+		//get the row by its id and feed the dataset
+		int nbColl = headers.size();
+		int rowStart = dataSheet.getFirstRowNum();
+		int rowEnd = dataSheet.getLastRowNum();
+		for (int rowNum = rowStart+1; rowNum <= rowEnd; rowNum++) {
+			Row row = dataSheet.getRow(rowNum);
+			if (row != null) {
+				if (row.getCell(0) != null && matchFilter(row.getCell(idColumnIndex).getStringCellValue())) {
+					LinkedHashMap<String, Object> rowList = new LinkedHashMap<String, Object>();	
+					for (int colNum = 0; colNum < nbColl; colNum++) {
+						Cell cell = row.getCell(colNum);
+						rowList.put(headers.get(colNum), getCellObject(cell));
+					}
+					datasets.put(rowNum-1, rowList);
+				}
+			}
+		}
+		return datasets;
+	}
 	private boolean matchFilter(String value) {
 		boolean matchFilter = true;
 		if (idFilter != null) {
@@ -260,5 +289,6 @@ public class ExcelExtractEngine implements DataExtractEngine {
 			headers.add(c.getStringCellValue());
 		}
 	}
+
 
 }
