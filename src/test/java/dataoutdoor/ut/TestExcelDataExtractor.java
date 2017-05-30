@@ -52,7 +52,7 @@ public class TestExcelDataExtractor {
 			engine.setDataCategory(category);
 			dataset1 = engine.getDatasetById(id);
 			dataset2 = engine.getDatasetById(id);
-			engine.setDataIdCategory("2");
+			engine.setIdCategory("2");
 			dataset3 = engine.getDatasetById("BS / BHS");
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
@@ -143,7 +143,7 @@ public class TestExcelDataExtractor {
 			engine.setDataSource(fileName);
 			engine.setDataCategory(sheetName);
 			allDatasets = engine.getDataTab();
-			engine.setDataIdFilter("Ca.*");
+			engine.setIdFilter("Ca.*");
 			filteredDatasets = engine.getDataTab();
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
@@ -178,7 +178,7 @@ public class TestExcelDataExtractor {
 			engine.setDataSource(fileName);
 			engine.setDataCategory(sheetName);
 			allDatasets = engine.getDatasets();
-			engine.setDataIdFilter("Ca.*");
+			engine.setIdFilter("Ca.*");
 			filteredDatasets = engine.getDatasets();
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
@@ -217,7 +217,7 @@ public class TestExcelDataExtractor {
 			engine.setDataCategory(category);
 			dataset1 = engine.getDatasetById(id);
 			dataset2 = engine.getDatasetById(id);
-			engine.setDataIdCategory("2");
+			engine.setIdCategory("2");
 			dataset3 = engine.getDatasetById("BS / BHS");
 		} catch (DataOutdoorException e) {
 			message = e.getMessage();

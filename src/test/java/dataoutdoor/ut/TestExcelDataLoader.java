@@ -86,7 +86,7 @@ public class TestExcelDataLoader {
 		
 		try {
 			loadEngine.setDataDestination("src/test/resources/datadestTest.xls");
-			loadEngine.setCategoryDestination("Category");
+			loadEngine.setDataCategory("Category");
 			loadEngine.addDataset(dataset1);
 			loadEngine.addDataset(dataset2);
 			loadEngine.save();

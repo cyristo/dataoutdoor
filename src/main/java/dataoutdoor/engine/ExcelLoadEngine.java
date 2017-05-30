@@ -45,7 +45,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 		dataSheet = workbook.createSheet(sheetName);
 	}
 
-	public void setCategoryDestination(String dataCategory) {
+	public void setDataCategory(String dataCategory) {
 		if (dataSheet != null) {
 			workbook.removeSheetAt(workbook.getSheetIndex(sheetName));
 			sheetName = dataCategory;
@@ -65,7 +65,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 		int lastRowNum = dataSheet.getLastRowNum();
 
 		Collection<String> keys = dataset.keySet();
-		if (lastRowNum == 0) setDataModel(keys);
+		if (lastRowNum == 0) setHeaders(keys);
 
 		Row row = dataSheet.createRow(lastRowNum+1);
 		CellStyle style;
@@ -99,7 +99,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 	}
 
-	public void setDataModel(Collection<String> headers) {
+	private void setHeaders(Collection<String> headers) {
 		Row row = dataSheet.createRow(0);
 		int i = 0;
 		for (Iterator<String> iterator = headers.iterator(); iterator.hasNext();) {

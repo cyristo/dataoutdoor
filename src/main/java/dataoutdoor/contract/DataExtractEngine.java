@@ -13,9 +13,9 @@ public interface DataExtractEngine {
 	
 	public void setDataCategory(String dataCategory) throws DataOutdoorException;
 	
-	public void setDataIdCategory(String dataIdCategory);
+	public void setIdCategory(String IdCategory);
 	
-	public void setDataIdFilter(String dataIdFilter);
+	public void setIdFilter(String IdFilter);
 	
 	public Collection<String> getDataModel(); 
 	

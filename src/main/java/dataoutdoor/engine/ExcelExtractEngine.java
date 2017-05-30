@@ -59,7 +59,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	 * Set the index for the column to be considered as id for the rows
 	 * @param idCol
 	 */
-	public void setDataIdCategory(String dataIdCategory) {
+	public void setIdCategory(String dataIdCategory) {
 		if (dataIdCategory == null) {
 			this.idColumnIndex = 0;
 		} else {
@@ -72,7 +72,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	 * Set the filter to be used on Id column when retrieving the dataset list
 	 * @param idFilter regex
 	 */
-	public void setDataIdFilter(String idFilter) {
+	public void setIdFilter(String idFilter) {
 		this.idFilter = idFilter;
 	}
 
