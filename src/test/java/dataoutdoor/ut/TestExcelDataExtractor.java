@@ -2,11 +2,12 @@ package dataoutdoor.ut;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,9 +43,9 @@ public class TestExcelDataExtractor {
 		Object id = "France";
 				
 		DataExtractEngine engine = new ExcelExtractEngine();
-		HashMap<String, Object> dataset1 = null;
-		HashMap<String, Object> dataset2 = null;
-		HashMap<String, Object> dataset3 = null;
+		LinkedHashMap<String, Object> dataset1 = null;
+		LinkedHashMap<String, Object> dataset2 = null;
+		LinkedHashMap<String, Object> dataset3 = null;
 		
 		try {
 			engine.setDataSource(fileName);
@@ -77,7 +78,7 @@ public class TestExcelDataExtractor {
 		int rowNum = 73;
 		
 		DataExtractEngine engine = new ExcelExtractEngine();
-		HashMap<String, Object> dataset = null;
+		LinkedHashMap<String, Object> dataset = null;
 				
 		try {
 			engine.setDataSource(fileName);
@@ -160,6 +161,38 @@ public class TestExcelDataExtractor {
 		assertThat(row240[5].toString(), is("10.48 Billion"));
 		
 		assertThat(filteredDatasets.size(), is(5));
+		
+	}
+	
+	@Test
+	public void should_handle_bad_category() {
+		
+		boolean exceptionThrown = false;
+		String category = "BAD";
+		Object id = "France";
+				
+		DataExtractEngine engine = new ExcelExtractEngine();
+		LinkedHashMap<String, Object> dataset1 = null;
+		LinkedHashMap<String, Object> dataset2 = null;
+		LinkedHashMap<String, Object> dataset3 = null;
+		
+		String message = null;
+		
+		try {
+			engine.setDataSource(fileName);
+			engine.setDataCategory(category);
+			dataset1 = engine.getDatasetById(id);
+			dataset2 = engine.getDatasetById(id);
+			engine.setDataIdCategory("2");
+			dataset3 = engine.getDatasetById("BS / BHS");
+		} catch (DataOutdoorException e) {
+			message = e.getMessage();
+			exceptionThrown = true;
+		}
+
+		assertTrue(exceptionThrown);
+		assertThat(message, is("Unknown category"));
+		
 		
 	}
 }

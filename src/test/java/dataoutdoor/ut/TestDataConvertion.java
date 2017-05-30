@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +43,7 @@ public class TestDataConvertion {
 		Object id = "France";
 				
 		DataExtractEngine engine = new ExcelExtractEngine();
-		HashMap<String, Object> dataset = null;
+		LinkedHashMap<String, Object> dataset = null;
 		
 		try {
 			engine.setDataSource(fileName);

@@ -3,11 +3,20 @@ package dataoutdoor.engine;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -32,11 +41,22 @@ public class ExcelLoadEngine implements DataLoadEngine {
 			workbook = new HSSFWorkbook();
 		}
 
+
 		dataSheet = workbook.createSheet("Generated sheet1");
+
+	}
+
+	public void setCategoryDestination(String dataCategory) {
+		// TODO Auto-generated method stub
+
 	}
 
 	public void setDataModel(Collection<String> dataModel) {
-		// TODO Auto-generated method stub
+		Row row = dataSheet.createRow(0);
+		int i = 0;
+		for (Iterator<String> iterator = dataModel.iterator(); iterator.hasNext();) {
+			row.createCell(i++).setCellValue((String) iterator.next());
+		}
 
 	}
 
@@ -45,8 +65,44 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 	}
 
-	public void addDataset(HashMap<String, Object> dataset) {
-		// TODO Auto-generated method stub
+	public void addDataset(LinkedHashMap<String, Object> dataset) {
+
+		int lastRowNum = dataSheet.getLastRowNum();
+
+		Collection<String> keys = dataset.keySet();
+		if (lastRowNum == 0) setDataModel(keys);
+
+		Row row = dataSheet.createRow(lastRowNum+1);
+
+		int i = 0;
+		for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
+			Object value = dataset.get(iterator.next());
+			if (value instanceof Double) {
+				CellStyle style;
+			    DataFormat format = workbook.createDataFormat();
+				Cell cell = row.createCell(i++);
+				cell.setCellValue((Double) value);
+			    style = workbook.createCellStyle();
+			    style.setDataFormat(format.getFormat("0.00"));
+			    cell.setCellStyle(style);
+			} else if (value instanceof Integer) {
+				CellStyle style;
+			    DataFormat format = workbook.createDataFormat();
+				Cell cell = row.createCell(i++);
+				cell.setCellValue((Integer) value);
+			    style = workbook.createCellStyle();
+			    style.setDataFormat(format.getFormat("0"));
+			    cell.setCellStyle(style);
+			} else if (value instanceof Date) {
+				row.createCell(i++).setCellValue((Date) value);
+			} else if (value instanceof Calendar) {
+				row.createCell(i++).setCellValue((Calendar) value);
+			} else if (value instanceof Boolean) {
+				row.createCell(i++).setCellValue((Boolean) value);
+			} else {
+				row.createCell(i++).setCellValue(value.toString());
+			}
+		}
 
 	}
 
@@ -81,5 +137,6 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 
 	}
+
 
 }

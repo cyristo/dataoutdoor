@@ -3,6 +3,7 @@ package dataoutdoor.contract;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import dataoutdoor.common.DataOutdoorException;
 
@@ -18,9 +19,9 @@ public interface DataExtractEngine {
 	
 	public Collection<String> getDataModel(); 
 	
-	public HashMap<String, Object> getDatasetById(Object id) throws DataOutdoorException;
+	public LinkedHashMap<String, Object> getDatasetById(Object id) throws DataOutdoorException;
 	
-	public HashMap<String, Object> getDatasetByRowNum(int rowNum) throws DataOutdoorException;
+	public LinkedHashMap<String, Object> getDatasetByRowNum(int rowNum) throws DataOutdoorException;
 	
 	public Collection<Object[]> getDatasets() throws DataOutdoorException;
 	

@@ -2,6 +2,7 @@ package dataoutdoor.common;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,7 +13,7 @@ public class Utils {
 
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	
-	public static String hashMaptoJson(HashMap<String, Object> map) {
+	public static String hashMaptoJson(LinkedHashMap<String, Object> map) {
 
 		StringBuilder buf = new StringBuilder();
 		

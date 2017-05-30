@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -49,6 +50,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 		if (dataCategory != null) {
 			index = dataSource.getSheetIndex(dataCategory);
 		}
+		if (index == -1) throw new DataOutdoorException("Unknown category");
 		dataSheet = dataSource.getSheetAt(index);
 		//set the header row
 		setHeaderRow();
@@ -88,12 +90,12 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	 * @return the row
 	 * @throws IOException
 	 */
-	public HashMap<String, Object> getDatasetById(Object id) throws DataOutdoorException {
+	public LinkedHashMap<String, Object> getDatasetById(Object id) throws DataOutdoorException {
 
 		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
 
 		//object returned
-		HashMap<String, Object> dataset = new HashMap<String, Object>();
+		LinkedHashMap<String, Object> dataset = new LinkedHashMap<String, Object>();
 
 		//set the sheet if not done
 		if (dataSheet == null) setDataCategory(null);
@@ -124,12 +126,12 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	 * @return
 	 * @throws IOException
 	 */
-	public HashMap<String, Object> getDatasetByRowNum(int rowNum) throws DataOutdoorException {
+	public LinkedHashMap<String, Object> getDatasetByRowNum(int rowNum) throws DataOutdoorException {
 
 		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
 
 		//object returned
-		HashMap<String, Object> dataset = new HashMap<String, Object>();
+		LinkedHashMap<String, Object> dataset = new LinkedHashMap<String, Object>();
 
 		//set the sheet if not done
 		if (dataSheet == null) setDataCategory(null);
@@ -250,6 +252,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	private void setHeaderRow() {
 		headers = new ArrayList<String>();
 		Row headerRow = dataSheet.getRow(0);
+		if (headerRow == null) return;
 		int colStart = headerRow.getFirstCellNum();
 		int colEnd = headerRow.getLastCellNum();
 		for (int colNum = colStart; colNum < colEnd; colNum++) {
