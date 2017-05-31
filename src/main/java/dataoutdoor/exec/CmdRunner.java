@@ -8,7 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataExtractEngine;
+import dataoutdoor.contract.DataLoadEngine;
 import dataoutdoor.extractors.ExcelExtractEngine;
+import dataoutdoor.loaders.JsonLoadEngine;
 
 public class CmdRunner {
 
@@ -26,13 +28,14 @@ public class CmdRunner {
 		}
 
 		LinkedHashMap<String, Object> dataset = null;
-		DataExtractEngine engine = new ExcelExtractEngine();
+		DataExtractEngine extractor = new ExcelExtractEngine();
+		JsonLoadEngine loader = new JsonLoadEngine();
 		boolean exceptionThrown = false;
 		
 		try {
-			engine.setDataSource(source);
-			engine.setDataCategory(category);
-			dataset = engine.getDatasetById(id);
+			extractor.setDataSource(source);
+			extractor.setDataCategory(category);
+			dataset = extractor.getDatasetById(id);
 		} catch (DataOutdoorException e) {
 			System.out.println("ERROR : " + e.getMessage());
 			exceptionThrown = true;
@@ -43,7 +46,8 @@ public class CmdRunner {
 				System.out.println("ERROR : Dataset not found in the specified datasource");
 			} else {
 				try {
-					System.out.println(Utils.hashMaptoJson(dataset));
+					loader.addDataset(dataset);
+					System.out.println(loader.getPrettyJson());
 				} catch (DataOutdoorException e) {
 					System.out.println("ERROR : " + e.getMessage());
 				}
