@@ -1,4 +1,4 @@
-package dataoutdoor.engine;
+package dataoutdoor.loaders;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,7 +30,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 	private Workbook workbook = null;
 	private String dataDestination = null;
 	private Sheet dataSheet = null;
-	private String sheetName = "Generated Data Outdoor";
+	private String sheetName = "Data Outdoor Sheet";
 	
 	public void setDataDestination(Object dataDestination) throws DataOutdoorException {
 
@@ -53,11 +53,6 @@ public class ExcelLoadEngine implements DataLoadEngine {
 		} else {
 			sheetName = dataCategory;
 		}
-	}
-
-	public void setDatasetTransformer(DatasetTransformer transformer) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void addDataset(LinkedHashMap<String, Object> dataset) {
@@ -99,6 +94,16 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 	}
 
+	public void addDatasets(LinkedHashMap<Integer, LinkedHashMap<String, Object>> datasets) {
+
+		Collection<Integer> rows = datasets.keySet();
+		for (Iterator<Integer> iterator = rows.iterator(); iterator.hasNext();) {
+			Integer key = (Integer) iterator.next();
+			addDataset(datasets.get(key));
+		}
+		
+	}
+	
 	private void setHeaders(Collection<String> headers) {
 		Row row = dataSheet.createRow(0);
 		int i = 0;
@@ -131,6 +136,8 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 
 	}
+
+
 
 	
 

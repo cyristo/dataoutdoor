@@ -1,4 +1,4 @@
-package dataoutdoor.engine;
+package dataoutdoor.extractors;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	private Workbook dataSource = null;
 	private Sheet dataSheet;
 	private ArrayList<String> headers = null;
-	private int idColumnIndex = 0;
+	private Integer idColumnIndex = 0;
 	private String idFilter = null;
 
 	/**
@@ -107,7 +107,8 @@ public class ExcelExtractEngine implements DataExtractEngine {
 		for (int rowNum = rowStart+1; rowNum <= rowEnd; rowNum++) {
 			Row row = dataSheet.getRow(rowNum);
 			if (row != null) {
-				if (row.getCell(idColumnIndex) != null && row.getCell(idColumnIndex).getStringCellValue().equals(id)) {
+				if (row.getCell(idColumnIndex) != null 
+						&& row.getCell(idColumnIndex).getStringCellValue().toUpperCase().equals(id.toString().toUpperCase())) {
 					for (int colNum = 0; colNum < nbColl; colNum++) {
 						Cell cell = row.getCell(colNum);
 						dataset.put(headers.get(colNum), getCellObject(cell));
@@ -126,7 +127,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	 * @return
 	 * @throws IOException
 	 */
-	public LinkedHashMap<String, Object> getDatasetByRowNum(int rowNum) throws DataOutdoorException {
+	public LinkedHashMap<String, Object> getDatasetByRowNum(Integer rowNum) throws DataOutdoorException {
 
 		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
 

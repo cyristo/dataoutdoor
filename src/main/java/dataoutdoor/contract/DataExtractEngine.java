@@ -21,7 +21,7 @@ public interface DataExtractEngine {
 	
 	public LinkedHashMap<String, Object> getDatasetById(Object id) throws DataOutdoorException;
 	
-	public LinkedHashMap<String, Object> getDatasetByRowNum(int rowNum) throws DataOutdoorException;
+	public LinkedHashMap<String, Object> getDatasetByRowNum(Integer rowNum) throws DataOutdoorException;
 	
 	public LinkedHashMap<Integer, LinkedHashMap<String, Object>> getDatasets() throws DataOutdoorException;
 	

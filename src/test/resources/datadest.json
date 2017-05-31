@@ -1,0 +1,13 @@
+{
+  "Category" : [ {
+    "COL 1" : "STRING 1",
+    "COL 2" : 22.0,
+    "COL 3" : 33,
+    "COL 4" : "true"
+  }, {
+    "COL 1" : "STRING 11",
+    "COL 2" : 222.0,
+    "COL 3" : 333,
+    "COL 4" : "false"
+  } ]
+}

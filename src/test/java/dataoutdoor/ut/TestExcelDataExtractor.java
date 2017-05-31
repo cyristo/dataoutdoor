@@ -16,7 +16,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.contract.DataExtractEngine;
-import dataoutdoor.engine.ExcelExtractEngine;
+import dataoutdoor.extractors.ExcelExtractEngine;
 
 @RunWith(Parameterized.class)
 public class TestExcelDataExtractor {
@@ -39,8 +39,8 @@ public class TestExcelDataExtractor {
 	public void should_get_correct_dataset_for_category_and_id() {
 		
 		boolean exceptionThrown = false;
-		String category = "COUNTRY";
-		Object id = "France";
+		String category = "CoUNTRY";
+		Object id = "FraNce";
 				
 		DataExtractEngine engine = new ExcelExtractEngine();
 		LinkedHashMap<String, Object> dataset1 = null;

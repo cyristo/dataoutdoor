@@ -12,9 +12,9 @@ public interface DataLoadEngine {
 	
 	public void setDataCategory(String dataCategory);
 	
-	public void setDatasetTransformer(DatasetTransformer transformer);
+	public void addDataset(LinkedHashMap<String, Object> dataset) throws DataOutdoorException;
 	
-	public void addDataset(LinkedHashMap<String, Object> dataset);
+	public void addDatasets(LinkedHashMap<Integer, LinkedHashMap<String, Object>> datasets) throws DataOutdoorException;
 	
 	public void save() throws DataOutdoorException;
 	

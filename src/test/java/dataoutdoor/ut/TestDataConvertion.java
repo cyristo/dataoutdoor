@@ -16,7 +16,7 @@ import org.junit.runners.Parameterized.Parameters;
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataExtractEngine;
-import dataoutdoor.engine.ExcelExtractEngine;
+import dataoutdoor.extractors.ExcelExtractEngine;
 
 @RunWith(Parameterized.class)
 public class TestDataConvertion {
@@ -55,8 +55,14 @@ public class TestDataConvertion {
 		}
 
 		assertFalse(exceptionThrown);
-		String json = Utils.hashMaptoJson(dataset);
-		
+		String json = "";
+		try {
+			json = Utils.hashMaptoJson(dataset);
+		} catch (DataOutdoorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		assertTrue(Utils.isValidJson(json));
 		
 	}

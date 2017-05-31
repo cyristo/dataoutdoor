@@ -1,4 +1,4 @@
-package dataoutdoor.engine;
+package dataoutdoor.exec;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -8,8 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataExtractEngine;
+import dataoutdoor.extractors.ExcelExtractEngine;
 
-public class Runner {
+public class CmdRunner {
 
 	public static void main(String[] args) {
 		
@@ -41,7 +42,11 @@ public class Runner {
 			if (dataset == null || dataset.isEmpty()) {
 				System.out.println("ERROR : Dataset not found in the specified datasource");
 			} else {
-				System.out.println(Utils.hashMaptoJson(dataset));
+				try {
+					System.out.println(Utils.hashMaptoJson(dataset));
+				} catch (DataOutdoorException e) {
+					System.out.println("ERROR : " + e.getMessage());
+				}
 			}
 		}
 
