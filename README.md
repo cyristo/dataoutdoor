@@ -8,13 +8,20 @@ Data Outdoor is based on 4 concepts:
 * dataset : the row referenced by the data id, in the data category of the data source
 
 Once Data Outdoor is configured and launched, you can access to any dataset through its REST resource: 
-http://yourhost:yourport/dataoutdoor/yourdatasource/yourdatacategory/yourdataid
+yourhost:yourport/dataoutdoor/yourdatasource/yourdatacategory/yourdataid
 
 ## How to install ?
 1. Donwload the distrib directory
 2. Rename dataoutdoor.version.jar-with-dependencies.zip to rename dataoutdoor.version.jar-with-dependencies.jar
-3. Edit the dataoutdoor.properties to configure your datasources and target URI
-4. Launch Data Outdoor : java -jar dataoutdoor.version.jar-with-dependencies.zip
+3. Launch Data Outdoor : java -jar dataoutdoor.version.jar-with-dependencies.zip
+
+Once you're done, you can get the picture by playing with using the embeded example : 
+-> localhost:8088/dataoutdoor/example/country/france
+-> localhost:8088/dataoutdoor/example/country/germany
+
+These resources come from the embeded Excel file (datasource.xlsx)
+
+4. Configure Data Outdoor property file with your own datasources, and relaunch 
 
 ## BDD use case : instead of having data inside the test scenario, use Data Outdoor to reference an external dataset. 
 
