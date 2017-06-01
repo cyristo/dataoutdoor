@@ -16,8 +16,9 @@ yourhost:yourport/dataoutdoor/yourdatasource/yourdatacategory/yourdataid
 3. Launch Data Outdoor : java -jar dataoutdoor.version.jar-with-dependencies.zip
 
 Once you're done, you can get the picture by playing with using the embeded example : 
--> localhost:8088/dataoutdoor/example/country/france
--> localhost:8088/dataoutdoor/example/country/germany
+* localhost:8088/dataoutdoor/example/country/france
+* localhost:8088/dataoutdoor/example/country/germany
+* ...
 
 These resources come from the embeded Excel file (datasource.xlsx)
 
