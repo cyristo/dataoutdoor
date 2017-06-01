@@ -1,7 +1,20 @@
 # Data externalization for testing or other usage. 
-Feed Data Outdoor with the data source (path to Excel file) and the dataset reference (either the row number or the cell value of the ID  column), then you will get the dataset (Excel row) in the form of a hashmap (the first row of the Excel sheet as the keys). 
+Data Outdoor enables you to simply expose any data row of any Excel files as a REST resource. 
 
-You can target a specific sheet of a multi sheet Excel file.
+Data Outdoor is based on 4 concepts:
+* data source : URI to an Excel file
+* data category : name of the Excel sheet
+* data id : value of the first column
+* dataset : the row referenced by the data id, in the data cataegory of the data source
+
+Once Data Outdoor is configured and launched, you can access to any dataset through its REST resource: 
+http://<yourhost>:<yourport>/dataoutdoor/<yourdatasource>/<yourdatacategory>/<yourdataid>
+
+## How to install ?
+1. Donwload the distrib directory
+2. rename dataoutdoor.<version>.jar-with-dependencies.zip to rename dataoutdoor.<version>.jar-with-dependencies.zip
+3. edit the dataoutdoor.properties to configure your datasources and target URI
+4. launch Data Outdoor : java -jar dataoutdoor.<version>.jar-with-dependencies.zip
 
 ## BDD use case : instead of having data inside the test scenario, use Data Outdoor to reference an external dataset. 
 
@@ -14,14 +27,12 @@ Without Data Outdoor :
 * Then I should get this result
 
 With Data Outdoor:
-* Given the country name is France (=> here your Fixture step will get the data set)
+* Given the country name is France (-> here your fixture code will access the dataset)
 * When I do something with that country
 * Then I should get this result
 
 ## Other use cases
 
-You can use Data Outdoor to simply get every Excel rows in a Collection of Object[], so that you can inject that Collection in your parametrized test class. You can set a filter on the ID column, to get a Colleciton that match only your criteria.
-
-At the opposite, you can use Data Outdoor to access a single Cell by its Excel reference.
+You can use Data Outdoor as a java framework. In that case, many other nice features are implemented as well.
 
 See the JUnit classes to get the documentation.
