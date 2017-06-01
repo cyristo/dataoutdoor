@@ -12,9 +12,9 @@ http://yourhost:yourport/dataoutdoor/yourdatasource/yourdatacategory/yourdataid
 
 ## How to install ?
 1. Donwload the distrib directory
-2. rename dataoutdoor.version.jar-with-dependencies.zip to rename dataoutdoor.version.jar-with-dependencies.zip
-3. edit the dataoutdoor.properties to configure your datasources and target URI
-4. launch Data Outdoor : java -jar dataoutdoor.version.jar-with-dependencies.zip
+2. Rename dataoutdoor.version.jar-with-dependencies.zip to rename dataoutdoor.version.jar-with-dependencies.jar
+3. Edit the dataoutdoor.properties to configure your datasources and target URI
+4. Launch Data Outdoor : java -jar dataoutdoor.version.jar-with-dependencies.zip
 
 ## BDD use case : instead of having data inside the test scenario, use Data Outdoor to reference an external dataset. 
 
