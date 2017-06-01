@@ -4,7 +4,7 @@ Data Outdoor enables you to simply expose any data row of any Excel files as a R
 Data Outdoor is based on 4 concepts:
 * data source : URI to an Excel file
 * data category : name of the Excel sheet
-* data id : value of the first column
+* data id : any value in the first column
 * dataset : the row referenced by the data id, in the data category of the data source
 
 Once Data Outdoor is configured and launched, you can access to any dataset through its REST resource: 
