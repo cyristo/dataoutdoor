@@ -22,6 +22,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import dataoutdoor.common.DataOutdoorException;
+import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataLoadEngine;
 import dataoutdoor.contract.DatasetTransformer;
 
@@ -73,13 +74,13 @@ public class ExcelLoadEngine implements DataLoadEngine {
 				Cell cell = row.createCell(i++);
 				cell.setCellValue((Double) value);
 			    style = workbook.createCellStyle();
-			    style.setDataFormat(format.getFormat("0.00"));
+			    style.setDataFormat(format.getFormat(Utils.getProperty("dataoutdoor.format.double")));
 			    cell.setCellStyle(style);
 			} else if (value instanceof Integer) {
 				Cell cell = row.createCell(i++);
 				cell.setCellValue((Integer) value);
 			    style = workbook.createCellStyle();
-			    style.setDataFormat(format.getFormat("0"));
+			    style.setDataFormat(format.getFormat(Utils.getProperty("dataoutdoor.format.integer")));
 			    cell.setCellStyle(style);
 			} else if (value instanceof Date) {
 				row.createCell(i++).setCellValue((Date) value);

@@ -1,9 +1,13 @@
 package dataoutdoor.common;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,6 +19,7 @@ public class Utils {
 
 	//private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	//private static final String LINE_SEPARATOR = "";
+	private static Properties props = null;
 	
 	public static String hashMaptoJson(LinkedHashMap<String, Object> map) throws DataOutdoorException {
 
@@ -93,5 +98,39 @@ public class Utils {
 		return valid;
 	}
 	
+	public static String getProperty(String key) {
+		if (props == null) {
+			try {
+				loadProperties();
+			} catch (DataOutdoorException e) {
+				return null;
+			}
+		}
+		return props.getProperty(key);
+	}
+	
+	private static Properties loadProperties() throws DataOutdoorException {
+		props = new Properties();
+		InputStream in = null;
+		try {
+			in = new FileInputStream("dataoutdoor.properties");
+		} catch (FileNotFoundException e) {
+			throw new DataOutdoorException(e);
+		}
+		if (in != null) {
+			try {
+				props.load(in);
+			} catch (IOException e) {
+				throw new DataOutdoorException(e);
+			} finally {
+				try {
+					in.close();
+				} catch (IOException e) {
+					throw new DataOutdoorException(e);
+				}
+			}
+		}
+		return props;
+	}
 	
 }

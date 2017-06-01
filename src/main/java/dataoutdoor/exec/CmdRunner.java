@@ -2,6 +2,7 @@ package dataoutdoor.exec;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,33 +15,51 @@ import dataoutdoor.loaders.JsonLoadEngine;
 
 public class CmdRunner {
 
+	private String source;
+	private String category;
+	private String id;
+
 	public static void main(String[] args) {
-		
-		String source = args[0];
-		String category = null;
-		String id = null;
-		if (StringUtils.contains(args[1], ":")) {
-			String split[] = StringUtils.split(args[1], ":");
+
+		CmdRunner runner = new CmdRunner();
+		runner.init(args);
+		runner.exec();
+
+	}
+
+	private void init(String[] args) {
+
+		source = Utils.getProperty("dataoutdoor.datasource");
+
+		category = null;
+		id = null;
+		if (StringUtils.contains(args[0], ":")) {
+			String split[] = StringUtils.split(args[0], ":");
 			category = split[0];
 			id = split[1];
 		} else {
 			id = args[1];
 		}
+	}
+
+	private void exec() {
+
 
 		LinkedHashMap<String, Object> dataset = null;
 		DataExtractEngine extractor = new ExcelExtractEngine();
 		JsonLoadEngine loader = new JsonLoadEngine();
 		boolean exceptionThrown = false;
-		
+
 		try {
 			extractor.setDataSource(source);
 			extractor.setDataCategory(category);
 			dataset = extractor.getDatasetById(id);
 		} catch (DataOutdoorException e) {
 			System.out.println("ERROR : " + e.getMessage());
+			e.printStackTrace();
 			exceptionThrown = true;
 		}
-		
+
 		if (!exceptionThrown) {
 			if (dataset == null || dataset.isEmpty()) {
 				System.out.println("ERROR : Dataset not found in the specified datasource");
@@ -50,11 +69,10 @@ public class CmdRunner {
 					System.out.println(loader.getPrettyJson());
 				} catch (DataOutdoorException e) {
 					System.out.println("ERROR : " + e.getMessage());
+					e.printStackTrace();
 				}
 			}
 		}
-
-
 	}
 
 }
