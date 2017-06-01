@@ -1,4 +1,4 @@
-# Simple data externalization engine for testing or other usage. 
+# Data externalization for testing or other usage. 
 Feed Data Outdoor with the data source (path to Excel file) and the dataset reference (either the row number or the cell value of the ID  column), then you will get the dataset (Excel row) in the form of a hashmap (the first row of the Excel sheet as the keys). 
 
 You can target a specific sheet of a multi sheet Excel file.
