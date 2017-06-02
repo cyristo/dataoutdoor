@@ -15,13 +15,14 @@ public abstract class AbstractTransformer implements DatasetTransformerEngine {
 		while (iter.hasNext()) {
 			String key = (String) iter.next();
 			Object value = (Object) dataset.get(key);
-			value = transformObject(key, value);
+			value = transformValue(key, value);
 			transformedDataset.put(key, value);
 		}
 
-		return transformedDataset;
+		return transformDataModel(transformedDataset);
 	}
 
-	public abstract Object transformObject(String key, Object value);
+	public abstract Object transformValue(String key, Object value);
 	
+	public abstract LinkedHashMap<String, Object> transformDataModel(LinkedHashMap<String, Object> transformedDataset);
 }

@@ -74,7 +74,10 @@ public class ExcelLoadEngine implements DataLoadEngine {
 		int i = 0;
 		for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
 			Object value = dataset.get(iterator.next());
-			if (value == null) break;
+			if (value == null) {
+				i++;
+				continue;
+			}
 			if (value instanceof Double) {
 				Cell cell = row.createCell(i++);
 				cell.setCellValue((Double) value);
