@@ -31,6 +31,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 	private Sheet dataSheet = null;
 	private String sheetName = "Data Outdoor Sheet";
 	private DataTransformEngine transformer = null;
+	private Collection<String> keys;
 	
 	public void setDataDestination(Object dataDestination) throws DataOutdoorException {
 
@@ -64,7 +65,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 		int lastRowNum = dataSheet.getLastRowNum();
 
 		if (transformer != null) dataset = transformer.transform(dataset);
-		Collection<String> keys = dataset.keySet();
+		keys = dataset.keySet();
 		if (lastRowNum == 0) setHeaders(keys);
 
 		Row row = dataSheet.createRow(lastRowNum+1);
@@ -125,6 +126,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 
 	public void save() throws DataOutdoorException {
+		adjust();
 		FileOutputStream fileOut = null;
 		try {
 			fileOut = new FileOutputStream(dataDestination.toString());
@@ -142,8 +144,14 @@ public class ExcelLoadEngine implements DataLoadEngine {
 				throw new DataOutdoorException(e3);
 			}
 		}
-
-
+	}
+	
+	private void adjust() {
+		int i = 0;
+		for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
+			iterator.next();
+			dataSheet.autoSizeColumn(i++);
+		}
 	}
 
 }
