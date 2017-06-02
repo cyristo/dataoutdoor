@@ -1,24 +1,18 @@
 package dataoutdoor.ut;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Date;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
-import dataoutdoor.contract.DataExtractEngine;
 import dataoutdoor.contract.DataLoadEngine;
-import dataoutdoor.extractors.ExcelExtractEngine;
-import dataoutdoor.loaders.ExcelLoadEngine;
 import dataoutdoor.loaders.JsonLoadEngine;
 
 public class TestJsonDataLoader {

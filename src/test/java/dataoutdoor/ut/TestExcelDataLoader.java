@@ -2,24 +2,15 @@ package dataoutdoor.ut;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.poi.ss.usermodel.CellType;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.contract.DataExtractEngine;

@@ -1,15 +1,12 @@
 package dataoutdoor.exec;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataExtractEngine;
-import dataoutdoor.contract.DataLoadEngine;
 import dataoutdoor.extractors.ExcelExtractEngine;
 import dataoutdoor.loaders.JsonLoadEngine;
 

@@ -1,7 +1,5 @@
 package dataoutdoor.contract;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import dataoutdoor.common.DataOutdoorException;
@@ -9,6 +7,8 @@ import dataoutdoor.common.DataOutdoorException;
 public interface DataLoadEngine {
 
 	public void setDataDestination(Object dataDestination) throws DataOutdoorException;
+	
+	public void setDatasetTransformer(DatasetTransformerEngine transformer) throws DataOutdoorException;
 	
 	public void setDataCategory(String dataCategory);
 	

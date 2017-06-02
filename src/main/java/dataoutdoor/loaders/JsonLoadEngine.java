@@ -1,8 +1,6 @@
 package dataoutdoor.loaders;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -12,28 +10,32 @@ import java.util.LinkedHashMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataLoadEngine;
+import dataoutdoor.contract.DatasetTransformerEngine;
 
 public class JsonLoadEngine implements DataLoadEngine {
 
 	private String dataDestination;
 	private String jsonTableName = "Data Outdoor Table";
 	private StringBuilder buf = new StringBuilder();
+	private DatasetTransformerEngine transformer = null;
 	
 	public void setDataDestination(Object dataDestination) throws DataOutdoorException {
 		this.dataDestination = dataDestination.toString();
 	}
 
+	public void setDatasetTransformer(DatasetTransformerEngine transformer) throws DataOutdoorException {
+		this.transformer = transformer;	
+	}
+	
 	public void setDataCategory(String dataCategory) {
 		jsonTableName = dataCategory;
 	}
 
 	public void addDataset(LinkedHashMap<String, Object> dataset) throws DataOutdoorException {
+		if (transformer != null) dataset = transformer.transform(dataset);
 		buf.append(Utils.hashMaptoJson(dataset));
 		buf.append(",");
 	}

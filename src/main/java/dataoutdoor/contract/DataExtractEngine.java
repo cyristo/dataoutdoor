@@ -1,8 +1,6 @@
 package dataoutdoor.contract;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import dataoutdoor.common.DataOutdoorException;

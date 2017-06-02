@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -14,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -24,7 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataLoadEngine;
-import dataoutdoor.contract.DatasetTransformer;
+import dataoutdoor.contract.DatasetTransformerEngine;
 
 public class ExcelLoadEngine implements DataLoadEngine {
 
@@ -32,6 +30,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 	private String dataDestination = null;
 	private Sheet dataSheet = null;
 	private String sheetName = "Data Outdoor Sheet";
+	private DatasetTransformerEngine transformer = null;
 	
 	public void setDataDestination(Object dataDestination) throws DataOutdoorException {
 
@@ -46,6 +45,10 @@ public class ExcelLoadEngine implements DataLoadEngine {
 		dataSheet = workbook.createSheet(sheetName);
 	}
 
+	public void setDatasetTransformer(DatasetTransformerEngine transformer) throws DataOutdoorException {
+		this.transformer = transformer;	
+	}
+	
 	public void setDataCategory(String dataCategory) {
 		if (dataSheet != null) {
 			workbook.removeSheetAt(workbook.getSheetIndex(sheetName));
@@ -60,6 +63,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 		int lastRowNum = dataSheet.getLastRowNum();
 
+		if (transformer != null) dataset = transformer.transform(dataset);
 		Collection<String> keys = dataset.keySet();
 		if (lastRowNum == 0) setHeaders(keys);
 
@@ -70,6 +74,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 		int i = 0;
 		for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
 			Object value = dataset.get(iterator.next());
+			if (value == null) break;
 			if (value instanceof Double) {
 				Cell cell = row.createCell(i++);
 				cell.setCellValue((Double) value);
@@ -137,10 +142,5 @@ public class ExcelLoadEngine implements DataLoadEngine {
 
 
 	}
-
-
-
-	
-
 
 }
