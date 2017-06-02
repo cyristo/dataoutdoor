@@ -13,20 +13,20 @@ import org.apache.commons.lang3.StringUtils;
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataLoadEngine;
-import dataoutdoor.contract.DatasetTransformerEngine;
+import dataoutdoor.contract.DataTransformEngine;
 
 public class JsonLoadEngine implements DataLoadEngine {
 
 	private String dataDestination;
 	private String jsonTableName = "Data Outdoor Table";
 	private StringBuilder buf = new StringBuilder();
-	private DatasetTransformerEngine transformer = null;
+	private DataTransformEngine transformer = null;
 	
 	public void setDataDestination(Object dataDestination) throws DataOutdoorException {
 		this.dataDestination = dataDestination.toString();
 	}
 
-	public void setDatasetTransformer(DatasetTransformerEngine transformer) throws DataOutdoorException {
+	public void setDatasetTransformer(DataTransformEngine transformer) throws DataOutdoorException {
 		this.transformer = transformer;	
 	}
 	

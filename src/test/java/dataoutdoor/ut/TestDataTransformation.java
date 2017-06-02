@@ -20,7 +20,7 @@ import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataExtractEngine;
 import dataoutdoor.contract.DataLoadEngine;
-import dataoutdoor.contract.DatasetTransformerEngine;
+import dataoutdoor.contract.DataTransformEngine;
 import dataoutdoor.extractors.ExcelExtractEngine;
 import dataoutdoor.loaders.ExcelLoadEngine;
 import dataoutdoor.transformers.AbstractTransformer;
@@ -38,7 +38,7 @@ public class TestDataTransformation {
 		DataExtractEngine extractor = new ExcelExtractEngine();
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> transDatasets = null;
 		
-		DatasetTransformerEngine transformer = new ExampleTransformer();
+		DataTransformEngine transformer = new ExampleTransformer();
 		
 		DataLoadEngine loader = new ExcelLoadEngine();
 

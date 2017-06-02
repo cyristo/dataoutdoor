@@ -8,7 +8,7 @@ public interface DataLoadEngine {
 
 	public void setDataDestination(Object dataDestination) throws DataOutdoorException;
 	
-	public void setDatasetTransformer(DatasetTransformerEngine transformer) throws DataOutdoorException;
+	public void setDatasetTransformer(DataTransformEngine transformer) throws DataOutdoorException;
 	
 	public void setDataCategory(String dataCategory);
 	

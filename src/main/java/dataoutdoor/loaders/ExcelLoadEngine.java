@@ -22,7 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.Utils;
 import dataoutdoor.contract.DataLoadEngine;
-import dataoutdoor.contract.DatasetTransformerEngine;
+import dataoutdoor.contract.DataTransformEngine;
 
 public class ExcelLoadEngine implements DataLoadEngine {
 
@@ -30,7 +30,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 	private String dataDestination = null;
 	private Sheet dataSheet = null;
 	private String sheetName = "Data Outdoor Sheet";
-	private DatasetTransformerEngine transformer = null;
+	private DataTransformEngine transformer = null;
 	
 	public void setDataDestination(Object dataDestination) throws DataOutdoorException {
 
@@ -45,7 +45,7 @@ public class ExcelLoadEngine implements DataLoadEngine {
 		dataSheet = workbook.createSheet(sheetName);
 	}
 
-	public void setDatasetTransformer(DatasetTransformerEngine transformer) throws DataOutdoorException {
+	public void setDatasetTransformer(DataTransformEngine transformer) throws DataOutdoorException {
 		this.transformer = transformer;	
 	}
 	

@@ -3,9 +3,9 @@ package dataoutdoor.transformers;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-import dataoutdoor.contract.DatasetTransformerEngine;
+import dataoutdoor.contract.DataTransformEngine;
 
-public abstract class AbstractTransformer implements DatasetTransformerEngine {
+public abstract class AbstractTransformer implements DataTransformEngine {
 
 	public LinkedHashMap<String, Object> transform(LinkedHashMap<String, Object> dataset) {
 
