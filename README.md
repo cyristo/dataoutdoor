@@ -35,7 +35,7 @@ Without Data Outdoor :
 * Then I should get this result
 
 With Data Outdoor:
-* Given the country name is France (-> here your fixture code will access the dataset)
+* Given the country name is France (-> here your fixture code will access the related dataset with its Data Outdoor REST API)
 * When I do something with that country
 * Then I should get this result
 
