@@ -15,7 +15,7 @@ yourhost:yourport/dataoutdoor/yourdatasource/yourdatacategory/yourdataid
 2. Rename dataoutdoor.version.jar-with-dependencies.zip to rename dataoutdoor.version.jar-with-dependencies.jar
 3. Launch Data Outdoor : java -jar dataoutdoor.version.jar-with-dependencies.zip
 
-Once you're done, you can get the picture by playing with using the embeded example : 
+Once you're done, you can get the picture by playing with the embeded example : 
 * localhost:8088/dataoutdoor/example/country/france
 * localhost:8088/dataoutdoor/example/country/germany
 * ...
