@@ -1,4 +1,4 @@
-# Data externalization for testing or other usage. 
+# Data externalization API for testing or other usage
 Data Outdoor enables you to simply expose any data row of any Excel files as a REST resource. 
 
 Data Outdoor is based on 4 concepts:
