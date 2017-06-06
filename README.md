@@ -13,7 +13,7 @@ yourhost:yourport/dataoutdoor/yourdatasource/yourdatacategory/yourdataid
 ## How to install ?
 1. Donwload the distrib directory
 2. Rename dataoutdoor.version.jar-with-dependencies.zip to rename dataoutdoor.version.jar-with-dependencies.jar
-3. Launch Data Outdoor : java -jar dataoutdoor.version.jar-with-dependencies.zip
+3. Launch Data Outdoor : java -jar dataoutdoor.version.jar-with-dependencies.jar
 
 Once you're done, you can get the picture by playing with the embeded example : 
 * localhost:8088/dataoutdoor/example/country/france
