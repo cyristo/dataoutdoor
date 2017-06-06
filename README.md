@@ -41,6 +41,12 @@ With Data Outdoor:
 
 ## Other use cases
 
-You can use Data Outdoor as a java framework. In that case, many other nice features are implemented as well.
+You can use Data Outdoor as a java framework. In that case, many other nice features are implemented as well, like :
+* extract all the datasets 
+* Set the column to be the identifier
+* extract datasets based on a filter
+* extract a dataset by its row number
+* load the extracted datasets in a JSON or Excel file
+* set transformation rules to transform the data prior to loading
 
 See the JUnit classes to get the documentation.
