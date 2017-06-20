@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
 
 import dataoutdoor.common.DataOutdoorException;
@@ -24,7 +25,8 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	private ArrayList<String> headers = null;
 	private Integer idColumnIndex = 0;
 	private String idFilter = null;
-
+	private int firstRow = 0;
+	
 	/**
 	 * Set the Excel Workbook as the datasource for the instance
 	 * @param dataSource
@@ -33,7 +35,11 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	public void setDataSource(Object dataSource) throws DataOutdoorException {
 		//get the workBook 
 		try {
-			this.dataSource = WorkbookFactory.create(new File(dataSource.toString()));
+			if (dataSource instanceof File) {
+				this.dataSource = WorkbookFactory.create((File) dataSource);
+			} else {
+				this.dataSource = WorkbookFactory.create(new File(dataSource.toString()));
+			}
 		} catch (Exception e) {
 			throw new DataOutdoorException(e);
 		}
@@ -98,12 +104,12 @@ public class ExcelExtractEngine implements DataExtractEngine {
 
 		//set the sheet if not done
 		if (dataSheet == null) setDataCategory(null);
-
+		
 		//get the row by its id and feed the dataset
 		int nbColl = headers.size();
-		int rowStart = dataSheet.getFirstRowNum();
+		//int rowStart = dataSheet.getFirstRowNum();
 		int rowEnd = dataSheet.getLastRowNum();
-		for (int rowNum = rowStart+1; rowNum <= rowEnd; rowNum++) {
+		for (int rowNum = firstRow+1; rowNum <= rowEnd; rowNum++) {
 			Row row = dataSheet.getRow(rowNum);
 			if (row != null) {
 				if (row.getCell(idColumnIndex) != null 
@@ -191,12 +197,12 @@ public class ExcelExtractEngine implements DataExtractEngine {
 
 		//set the sheet if not done
 		if (dataSheet == null) setDataCategory(null);
-
+		
 		//get the row by its id and feed the dataset
 		int nbColl = headers.size();
-		int rowStart = dataSheet.getFirstRowNum();
+		//int rowStart = dataSheet.getFirstRowNum();
 		int rowEnd = dataSheet.getLastRowNum();
-		for (int rowNum = rowStart+1; rowNum <= rowEnd; rowNum++) {
+		for (int rowNum = firstRow+1; rowNum <= rowEnd; rowNum++) {
 			Row row = dataSheet.getRow(rowNum);
 			if (row != null) {
 				if (row.getCell(0) != null && matchFilter(row.getCell(idColumnIndex).getStringCellValue())) {
@@ -224,9 +230,9 @@ public class ExcelExtractEngine implements DataExtractEngine {
 
 		//get the row by its id and feed the dataset
 		int nbColl = headers.size();
-		int rowStart = dataSheet.getFirstRowNum();
+		//int rowStart = dataSheet.getFirstRowNum();
 		int rowEnd = dataSheet.getLastRowNum();
-		for (int rowNum = rowStart+1; rowNum <= rowEnd; rowNum++) {
+		for (int rowNum = firstRow+1; rowNum <= rowEnd; rowNum++) {
 			Row row = dataSheet.getRow(rowNum);
 			if (row != null) {
 				if (row.getCell(0) != null && matchFilter(row.getCell(idColumnIndex).getStringCellValue())) {
@@ -280,7 +286,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 
 	private void setHeaderRow() {
 		headers = new ArrayList<String>();
-		Row headerRow = dataSheet.getRow(0);
+		Row headerRow = dataSheet.getRow(firstRow);
 		if (headerRow == null) return;
 		int colStart = headerRow.getFirstCellNum();
 		int colEnd = headerRow.getLastCellNum();
