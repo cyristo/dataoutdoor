@@ -25,8 +25,8 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	private ArrayList<String> headers = null;
 	private Integer idColumnIndex = 0;
 	private String idFilter = null;
-	private int firstRow = 0;
-	
+	private int headerRowNum = 0;
+
 	/**
 	 * Set the Excel Workbook as the datasource for the instance
 	 * @param dataSource
@@ -86,11 +86,11 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	 * @param firstRow
 	 */
 	public void setHeaderRow(int firstRow) {
-		this.firstRow = firstRow;
+		this.headerRowNum = firstRow;
 		//reset the header row
 		setHeaders();
 	}
-	
+
 	/**
 	 * Get the header row (first row)
 	 * @return
@@ -98,7 +98,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 	public Collection<String> getDataModel() {
 		return headers;
 	}
-	
+
 	/**
 	 * Get the dataset by its ID
 	 * @param cell value of the column set to be the id column (default is first column)
@@ -114,12 +114,11 @@ public class ExcelExtractEngine implements DataExtractEngine {
 
 		//set the sheet if not done
 		if (dataSheet == null) setDataCategory(null);
-		
+
 		//get the row by its id and feed the dataset
 		int nbColl = headers.size();
-		//int rowStart = dataSheet.getFirstRowNum();
 		int rowEnd = dataSheet.getLastRowNum();
-		for (int rowNum = firstRow+1; rowNum <= rowEnd; rowNum++) {
+		for (int rowNum = headerRowNum+1; rowNum <= rowEnd; rowNum++) {
 			Row row = dataSheet.getRow(rowNum);
 			if (row != null) {
 				if (row.getCell(idColumnIndex) != null 
@@ -207,12 +206,11 @@ public class ExcelExtractEngine implements DataExtractEngine {
 
 		//set the sheet if not done
 		if (dataSheet == null) setDataCategory(null);
-		
+
 		//get the row by its id and feed the dataset
-		int nbColl = headers.size();
-		//int rowStart = dataSheet.getFirstRowNum();
 		int rowEnd = dataSheet.getLastRowNum();
-		for (int rowNum = firstRow+1; rowNum <= rowEnd; rowNum++) {
+		int nbColl = headers.size();
+		for (int rowNum = headerRowNum+1; rowNum <= rowEnd; rowNum++) {
 			Row row = dataSheet.getRow(rowNum);
 			if (row != null) {
 				if (row.getCell(0) != null && matchFilter(row.getCell(idColumnIndex).getStringCellValue())) {
@@ -228,8 +226,30 @@ public class ExcelExtractEngine implements DataExtractEngine {
 		return datasets;
 	}
 
-	public LinkedHashMap<Integer, LinkedHashMap<String, Object>> getDatasets() throws DataOutdoorException {
+	public Collection<Object[]> getRangedDataTab(int firstRow, int lastRow, int firstCol, int lastCol) throws DataOutdoorException {
+
+		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
+
+		//object returned
+		Collection<Object[]> datasets = new ArrayList<Object[]>();
 		
+		//set the sheet if not done
+		if (dataSheet == null) setDataCategory(null);
+
+		dataSheet.setAutoFilter(new CellRangeAddress(firstRow, lastRow, firstCol, lastCol));
+
+		for (Row row : dataSheet) {
+			ArrayList<Object> rowList = new ArrayList<Object>();	
+			for (Cell cell : row) {
+				rowList.add(getCellObject(cell));
+			}
+			datasets.add(rowList.toArray());
+		}
+		return datasets;
+	}
+
+	public LinkedHashMap<Integer, LinkedHashMap<String, Object>> getDatasets() throws DataOutdoorException {
+
 		if (dataSource == null) throw new DataOutdoorException("Data source is not set");
 
 		//object returned
@@ -240,9 +260,8 @@ public class ExcelExtractEngine implements DataExtractEngine {
 
 		//get the row by its id and feed the dataset
 		int nbColl = headers.size();
-		//int rowStart = dataSheet.getFirstRowNum();
 		int rowEnd = dataSheet.getLastRowNum();
-		for (int rowNum = firstRow+1; rowNum <= rowEnd; rowNum++) {
+		for (int rowNum = headerRowNum+1; rowNum <= rowEnd; rowNum++) {
 			Row row = dataSheet.getRow(rowNum);
 			if (row != null) {
 				if (row.getCell(0) != null && matchFilter(row.getCell(idColumnIndex).getStringCellValue())) {
@@ -264,7 +283,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 		}
 		return matchFilter;
 	}
-	
+
 	private Object getCellObject(Cell cell) {
 		Object ret = null;
 		if (cell == null) return ret;
@@ -296,7 +315,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 
 	private void setHeaders() {
 		headers = new ArrayList<String>();
-		Row headerRow = dataSheet.getRow(firstRow);
+		Row headerRow = dataSheet.getRow(headerRowNum);
 		if (headerRow == null) return;
 		int colStart = headerRow.getFirstCellNum();
 		int colEnd = headerRow.getLastCellNum();

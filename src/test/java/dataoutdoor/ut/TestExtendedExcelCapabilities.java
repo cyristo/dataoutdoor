@@ -22,16 +22,16 @@ public class TestExtendedExcelCapabilities {
 
 	@Test
 	public void should_get_data_from_merged_files() {
-		
+
 		boolean exceptionThrown = false;
 		String category = "CoUNTRY";
 		Object id = "FraNce";
-		
+
 		String[] extenstions = new String[2];
 		extenstions[0] = "xls";
 		extenstions[1] = "xlsx";
 		Collection<File> files = FileUtils.listFiles(new File("src/test/resources/multiple"), extenstions, false);
-		
+
 		MultipleExcelExtractEngine engine = new MultipleExcelExtractEngine();
 		Collection<Object> cellList = new ArrayList<Object>();
 		Collection<Object[]> datatab = new ArrayList<Object[]>();
@@ -43,16 +43,16 @@ public class TestExtendedExcelCapabilities {
 			exceptionThrown = true;
 			e.printStackTrace();
 		}
-		
+
 		assertFalse(exceptionThrown);
-		
+
 		assertThat(cellList.size(), is(2));
 		assertThat(cellList.toArray()[0].toString(), is("93.0"));
 		assertThat(cellList.toArray()[1].toString(), is("93.0"));
-		
+
 		assertThat(datatab.size(), is(240*2));
 	}
-	
+
 	@Test
 	public void should_set_the_row_to_be_considered_as_header() {
 		boolean exceptionThrown = false;
@@ -64,7 +64,7 @@ public class TestExtendedExcelCapabilities {
 		Collection<String> datamodel = null;
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> allDatasets = null;
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>>filteredDatasets = null;
-		
+
 		try {
 			engine.setDataSource("src/test/resources/BIP_Assessment 130617.xlsx");
 			engine.setDataCategory("BSC proposals");
@@ -77,7 +77,7 @@ public class TestExtendedExcelCapabilities {
 			allDatasets = engine.getDatasets();
 			engine.setIdFilter("Comprehensive Testing");
 			filteredDatasets = engine.getDatasets();
-	
+
 
 		} catch (DataOutdoorException e) {
 			e.printStackTrace();
@@ -85,27 +85,48 @@ public class TestExtendedExcelCapabilities {
 		}
 
 		assertFalse(exceptionThrown);
-		
+
 		String result1 = (String) dataset1.get("Applicable to project (Y/N)");
 		assertThat(result1, is("TOTO"));
-		
+
 		assertThat(cell.toString(), is("Security"));
-		
+
 		assertThat(datamodel.size(), is(12));
 		assertThat(datamodel.toArray()[0].toString(), is("Theme"));
-		
+
 		String result2 = (String) dataset2.get("Applicable to project (Y/N)");
 		assertThat(result2, is("THIS ONE"));
-		
+
 		assertThat(allDatasets.size(), is(34));
 		assertThat(filteredDatasets.size(), is(4));
 	}
-	
+
 	@Test
 	public void should_get_a_selected_area() {
-		//TODO implement
-		//dataSheet.setAutoFilter(new CellRangeAddress(firstRow, lastRow, firstCol, lastCol)):
-		
+		boolean exceptionThrown = false;
+
+		ExcelExtractEngine engine = new ExcelExtractEngine();
+		Collection<Object[]> datatab = null;
+
+		try {
+			engine.setDataSource("src/test/resources/BIP_Assessment 130617.xlsx");
+			datatab = engine.getRangedDataTab(6, 26, 1, 2);
+
+		} catch (DataOutdoorException e) {
+			e.printStackTrace();
+			exceptionThrown = true;
+		}
+
+		assertFalse(exceptionThrown);
+
+		assertThat(datatab.size(), is(24));
+		Object[] tab = datatab.toArray();
+
+		Object[] row0 = (Object[]) tab[0];
+		Object[] row10 = (Object[]) tab[10];
+		assertThat(row0[0].toString(), is("Item"));
+		assertThat(row10[1].toString(), is("Antoine BABOEUF"));
+
 	}
 
 }
