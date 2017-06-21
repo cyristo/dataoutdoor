@@ -49,9 +49,10 @@ public class DataOutdoorUtils {
 	public static LinkedHashMap<String, Object> datatabToDataset(Collection<Object[]> datatab) {
 		LinkedHashMap<String, Object> dataset = new LinkedHashMap<String, Object>();
 		
-		for (Iterator iterator = datatab.iterator(); iterator.hasNext();) {
+		for (Iterator<Object[]> iterator = datatab.iterator(); iterator.hasNext();) {
 			Object[] objects = (Object[]) iterator.next();
 			String key = objects[0].toString();
+			System.out.println(key);
 			String value = objects[1].toString();
 			dataset.put(key, value);
 		}
