@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import dataoutdoor.common.DataOutdoorException;
-import dataoutdoor.common.Utils;
+import dataoutdoor.common.DataOutdoorUtils;
 import dataoutdoor.contract.DataExtractEngine;
 import dataoutdoor.extractors.ExcelExtractEngine;
 
@@ -39,7 +39,7 @@ public class HttpResource {
 		boolean exceptionThrown = false;
 		
 		try {
-			engine.setDataSource(Utils.getProperty("dataoutdoor.datasource."+datasource));
+			engine.setDataSource(DataOutdoorUtils.getProperty("dataoutdoor.datasource."+datasource));
 			engine.setDataCategory(datacategory);
 			dataset = engine.getDatasetById(datasetid);
 		} catch (DataOutdoorException e) {
@@ -52,8 +52,8 @@ public class HttpResource {
 				ret = "ERROR : Dataset not found in the specified datasource";
 			} else {
 				try {
-					ret = Utils.hashMaptoJson(dataset);
-					ret = Utils.formatPrettyJson(ret);
+					ret = DataOutdoorUtils.hashMaptoJson(dataset);
+					ret = DataOutdoorUtils.formatPrettyJson(ret);
 				} catch (DataOutdoorException e) {
 					ret = "ERROR : " + e.getMessage();
 				}

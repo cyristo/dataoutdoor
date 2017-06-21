@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-import dataoutdoor.common.Utils;
+import dataoutdoor.common.DataOutdoorUtils;
 import dataoutdoor.contract.DataLoadEngine;
 import dataoutdoor.loaders.JsonLoadEngine;
 
@@ -68,7 +68,7 @@ public class TestJsonDataLoader {
 		
 		assertFalse(exceptionThrown);
 		
-		assertTrue(Utils.isValidJson(json));
+		assertTrue(DataOutdoorUtils.isValidJson(json));
 		
 		
 	}

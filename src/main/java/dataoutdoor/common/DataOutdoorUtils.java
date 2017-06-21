@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Properties;
@@ -14,7 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Utils {
+public class DataOutdoorUtils {
 
 	//private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	//private static final String LINE_SEPARATOR = "";
@@ -43,6 +44,19 @@ public class Utils {
 		//json = formatPrettyJson(json);
 		return json;
 		
+	}
+	
+	public static LinkedHashMap<String, Object> datatabToDataset(Collection<Object[]> datatab) {
+		LinkedHashMap<String, Object> dataset = new LinkedHashMap<String, Object>();
+		
+		for (Iterator iterator = datatab.iterator(); iterator.hasNext();) {
+			Object[] objects = (Object[]) iterator.next();
+			String key = objects[0].toString();
+			String value = objects[1].toString();
+			dataset.put(key, value);
+		}
+		
+		return dataset;
 	}
 	
 	public static String formatPrettyJson(String txt) throws  DataOutdoorException {

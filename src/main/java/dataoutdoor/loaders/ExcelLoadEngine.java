@@ -20,7 +20,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import dataoutdoor.common.DataOutdoorException;
-import dataoutdoor.common.Utils;
+import dataoutdoor.common.DataOutdoorUtils;
 import dataoutdoor.contract.DataLoadEngine;
 import dataoutdoor.contract.DataTransformEngine;
 
@@ -83,13 +83,13 @@ public class ExcelLoadEngine implements DataLoadEngine {
 				Cell cell = row.createCell(i++);
 				cell.setCellValue((Double) value);
 			    style = workbook.createCellStyle();
-			    style.setDataFormat(format.getFormat(Utils.getProperty("dataoutdoor.format.double")));
+			    style.setDataFormat(format.getFormat(DataOutdoorUtils.getProperty("dataoutdoor.format.double")));
 			    cell.setCellStyle(style);
 			} else if (value instanceof Integer) {
 				Cell cell = row.createCell(i++);
 				cell.setCellValue((Integer) value);
 			    style = workbook.createCellStyle();
-			    style.setDataFormat(format.getFormat(Utils.getProperty("dataoutdoor.format.integer")));
+			    style.setDataFormat(format.getFormat(DataOutdoorUtils.getProperty("dataoutdoor.format.integer")));
 			    cell.setCellStyle(style);
 			} else if (value instanceof Date) {
 				row.createCell(i++).setCellValue((Date) value);

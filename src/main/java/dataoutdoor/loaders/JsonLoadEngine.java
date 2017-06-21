@@ -11,7 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import dataoutdoor.common.DataOutdoorException;
-import dataoutdoor.common.Utils;
+import dataoutdoor.common.DataOutdoorUtils;
 import dataoutdoor.contract.DataLoadEngine;
 import dataoutdoor.contract.DataTransformEngine;
 
@@ -36,7 +36,7 @@ public class JsonLoadEngine implements DataLoadEngine {
 
 	public void addDataset(LinkedHashMap<String, Object> dataset) throws DataOutdoorException {
 		if (transformer != null) dataset = transformer.transform(dataset);
-		buf.append(Utils.hashMaptoJson(dataset));
+		buf.append(DataOutdoorUtils.hashMaptoJson(dataset));
 		buf.append(",");
 	}
 
@@ -61,7 +61,7 @@ public class JsonLoadEngine implements DataLoadEngine {
 		String pretty = buf.toString();
 		pretty = StringUtils.removeEnd(pretty, ",");
 		pretty = "{\""+jsonTableName+"\":["+pretty+"]}";
-		pretty = Utils.formatPrettyJson(pretty);
+		pretty = DataOutdoorUtils.formatPrettyJson(pretty);
 		return pretty;
 	}
 	

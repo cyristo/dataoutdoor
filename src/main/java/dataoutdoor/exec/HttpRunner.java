@@ -7,11 +7,11 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import dataoutdoor.common.Utils;
+import dataoutdoor.common.DataOutdoorUtils;
 
 public class HttpRunner {
     // Base URI the Grizzly HTTP server will listen on
-    private static String baseURI = Utils.getProperty("dataoutdoor.baseuri");
+    private static String baseURI = DataOutdoorUtils.getProperty("dataoutdoor.baseuri");
 	
     
     /**

@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import org.apache.commons.lang3.StringUtils;
 
 import dataoutdoor.common.DataOutdoorException;
-import dataoutdoor.common.Utils;
+import dataoutdoor.common.DataOutdoorUtils;
 import dataoutdoor.contract.DataExtractEngine;
 import dataoutdoor.extractors.ExcelExtractEngine;
 import dataoutdoor.loaders.JsonLoadEngine;
@@ -26,7 +26,7 @@ public class CmdRunner {
 
 	private void init(String[] args) {
 
-		source = Utils.getProperty("dataoutdoor.datasource");
+		source = DataOutdoorUtils.getProperty("dataoutdoor.datasource");
 
 		category = null;
 		id = null;
