@@ -8,11 +8,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import dataoutdoor.common.DataOutdoorException;
+import dataoutdoor.contract.DataExtractEngine;
+import dataoutdoor.extractors.ExcelExtractEngine;
 import dataoutdoor.extractors.MultipleExcelExtractEngine;
 
 public class TestExtendedExcelCapabilities {
@@ -52,8 +55,50 @@ public class TestExtendedExcelCapabilities {
 	
 	@Test
 	public void should_set_the_row_to_be_considered_as_header() {
-		//TODO implement setFirstRow
+		boolean exceptionThrown = false;
+
+		ExcelExtractEngine engine = new ExcelExtractEngine();
+		LinkedHashMap<String, Object> dataset1 = null;
+		LinkedHashMap<String, Object> dataset2 = null;
+		Object cell = null;
+		Collection<String> datamodel = null;
+		LinkedHashMap<Integer, LinkedHashMap<String, Object>> allDatasets = null;
+		LinkedHashMap<Integer, LinkedHashMap<String, Object>>filteredDatasets = null;
 		
+		try {
+			engine.setDataSource("src/test/resources/BIP_Assessment 130617.xlsx");
+			engine.setDataCategory("BSC proposals");
+			engine.setIdCategory("1");
+			engine.setHeaderRow(5);
+			dataset1 = engine.getDatasetById("Tools");
+			cell = engine.getDataByReference("B24"); //Security
+			datamodel = engine.getDataModel();
+			dataset2 = engine.getDatasetByRowNum(10);
+			allDatasets = engine.getDatasets();
+			engine.setIdFilter("Comprehensive Testing");
+			filteredDatasets = engine.getDatasets();
+	
+
+		} catch (DataOutdoorException e) {
+			e.printStackTrace();
+			exceptionThrown = true;
+		}
+
+		assertFalse(exceptionThrown);
+		
+		String result1 = (String) dataset1.get("Applicable to project (Y/N)");
+		assertThat(result1, is("TOTO"));
+		
+		assertThat(cell.toString(), is("Security"));
+		
+		assertThat(datamodel.size(), is(12));
+		assertThat(datamodel.toArray()[0].toString(), is("Theme"));
+		
+		String result2 = (String) dataset2.get("Applicable to project (Y/N)");
+		assertThat(result2, is("THIS ONE"));
+		
+		assertThat(allDatasets.size(), is(34));
+		assertThat(filteredDatasets.size(), is(4));
 	}
 	
 	@Test

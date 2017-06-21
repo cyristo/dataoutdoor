@@ -58,7 +58,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 		if (index == -1) throw new DataOutdoorException("Unknown category");
 		dataSheet = dataSource.getSheetAt(index);
 		//set the header row
-		setHeaderRow();
+		setHeaders();
 	}
 	/**
 	 * Set the index for the column to be considered as id for the rows
@@ -81,6 +81,16 @@ public class ExcelExtractEngine implements DataExtractEngine {
 		this.idFilter = idFilter;
 	}
 
+	/**
+	 * Set the row number to be considered as the header row
+	 * @param firstRow
+	 */
+	public void setHeaderRow(int firstRow) {
+		this.firstRow = firstRow;
+		//reset the header row
+		setHeaders();
+	}
+	
 	/**
 	 * Get the header row (first row)
 	 * @return
@@ -127,7 +137,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 
 	/**
 	 * Get the dataset by its row number
-	 * @param rowNum the number of the row - first row is header, so it is not considered as a row. 
+	 * @param rowNum the number of the row - first row is 0. 
 	 * For example, to get the excel row number 10 then search for the 9th rownum
 	 * @return
 	 * @throws IOException
@@ -284,7 +294,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 		return ret;
 	}
 
-	private void setHeaderRow() {
+	private void setHeaders() {
 		headers = new ArrayList<String>();
 		Row headerRow = dataSheet.getRow(firstRow);
 		if (headerRow == null) return;
@@ -292,7 +302,7 @@ public class ExcelExtractEngine implements DataExtractEngine {
 		int colEnd = headerRow.getLastCellNum();
 		for (int colNum = colStart; colNum < colEnd; colNum++) {
 			Cell c = headerRow.getCell(colNum);
-			headers.add(c.getStringCellValue());
+			if (c != null) headers.add(c.getStringCellValue());
 		}
 	}
 
