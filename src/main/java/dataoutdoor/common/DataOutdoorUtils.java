@@ -52,7 +52,6 @@ public class DataOutdoorUtils {
 		for (Iterator<Object[]> iterator = datatab.iterator(); iterator.hasNext();) {
 			Object[] objects = (Object[]) iterator.next();
 			String key = objects[0].toString();
-			System.out.println(key);
 			String value = objects[1].toString();
 			dataset.put(key, value);
 		}
