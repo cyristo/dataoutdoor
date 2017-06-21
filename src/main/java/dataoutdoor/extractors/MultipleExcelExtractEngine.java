@@ -110,6 +110,13 @@ public class MultipleExcelExtractEngine implements DataExtractEngine {
 		return cellList;
 	}
 	
-	
+	public Collection<Object[]> getRangedDataTab(int firstRow, int lastRow, int firstCol, int lastCol) throws DataOutdoorException {
+		Collection<Object[]> datatab = new ArrayList<Object[]>();
+		for (Iterator<ExcelExtractEngine> iterator = engines.iterator(); iterator.hasNext();) {
+			ExcelExtractEngine engine = (ExcelExtractEngine) iterator.next();
+			datatab.addAll(engine.getRangedDataTab(firstRow, lastRow, firstCol, lastCol));
+		}
+		return datatab;
+	}
 
 }
