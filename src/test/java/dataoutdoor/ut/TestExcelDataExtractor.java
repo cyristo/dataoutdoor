@@ -15,8 +15,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import dataoutdoor.common.DataOutdoorException;
-import dataoutdoor.contract.DataExtractEngine;
-import dataoutdoor.extractors.ExcelExtractEngine;
+import dataoutdoor.contract.DataExtractorEngine;
+import dataoutdoor.extractor.ExcelExtractor;
 
 @RunWith(Parameterized.class)
 public class TestExcelDataExtractor {
@@ -42,7 +42,7 @@ public class TestExcelDataExtractor {
 		String category = "CoUNTRY";
 		Object id = "FraNce";
 				
-		DataExtractEngine engine = new ExcelExtractEngine();
+		DataExtractorEngine engine = new ExcelExtractor();
 		LinkedHashMap<String, Object> dataset1 = null;
 		LinkedHashMap<String, Object> dataset2 = null;
 		LinkedHashMap<String, Object> dataset3 = null;
@@ -77,7 +77,7 @@ public class TestExcelDataExtractor {
 		String category = "COUNTRY";
 		int rowNum = 73;
 		
-		DataExtractEngine engine = new ExcelExtractEngine();
+		DataExtractorEngine engine = new ExcelExtractor();
 		LinkedHashMap<String, Object> dataset = null;
 				
 		try {
@@ -104,7 +104,7 @@ public class TestExcelDataExtractor {
 		String cellReference2 = "A1";
 		String cellReference3 = "F241";
 				
-		DataExtractEngine engine = new ExcelExtractEngine();
+		DataExtractorEngine engine = new ExcelExtractor();
 		Object cellVal1 = null;
 		Object cellVal2 = null;
 		Object cellVal3 = null;
@@ -135,7 +135,7 @@ public class TestExcelDataExtractor {
 		boolean exceptionThrown = false;
 		String sheetName = "COUNTRY";
 				
-		DataExtractEngine engine = new ExcelExtractEngine();
+		DataExtractorEngine engine = new ExcelExtractor();
 		Collection<Object[]> allDatasets = null;
 		Collection<Object[]> filteredDatasets = null;
 		
@@ -170,7 +170,7 @@ public class TestExcelDataExtractor {
 		boolean exceptionThrown = false;
 		String sheetName = "COUNTRY";
 				
-		DataExtractEngine engine = new ExcelExtractEngine();
+		DataExtractorEngine engine = new ExcelExtractor();
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> allDatasets = null;
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>>filteredDatasets = null;
 		
@@ -205,7 +205,7 @@ public class TestExcelDataExtractor {
 		String category = "BAD";
 		Object id = "France";
 				
-		DataExtractEngine engine = new ExcelExtractEngine();
+		DataExtractorEngine engine = new ExcelExtractor();
 		LinkedHashMap<String, Object> dataset1 = null;
 		LinkedHashMap<String, Object> dataset2 = null;
 		LinkedHashMap<String, Object> dataset3 = null;

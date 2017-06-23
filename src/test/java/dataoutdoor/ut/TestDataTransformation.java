@@ -2,28 +2,23 @@ package dataoutdoor.ut;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 import dataoutdoor.common.DataOutdoorException;
-import dataoutdoor.common.DataOutdoorUtils;
-import dataoutdoor.contract.DataExtractEngine;
-import dataoutdoor.contract.DataLoadEngine;
-import dataoutdoor.contract.DataTransformEngine;
-import dataoutdoor.extractors.ExcelExtractEngine;
-import dataoutdoor.loaders.ExcelLoadEngine;
-import dataoutdoor.transformers.AbstractTransformer;
+import dataoutdoor.contract.DataExtractorEngine;
+import dataoutdoor.contract.DataLoaderEngine;
+import dataoutdoor.contract.DataTransformerEngine;
+import dataoutdoor.extractor.ExcelExtractor;
+import dataoutdoor.loader.ExcelLoader;
+import dataoutdoor.transformer.AbstractTransformer;
 
 public class TestDataTransformation {
 
@@ -35,21 +30,21 @@ public class TestDataTransformation {
 		boolean exceptionThrown = false;
 
 				
-		DataExtractEngine extractor = new ExcelExtractEngine();
+		DataExtractorEngine extractor = new ExcelExtractor();
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> transDatasets = null;
 		
-		DataTransformEngine transformer = new ExampleTransformer();
+		DataTransformerEngine transformer = new ExampleTransformer();
 		
-		DataLoadEngine loader = new ExcelLoadEngine();
+		DataLoaderEngine loader = new ExcelLoader();
 
 		
 		try {
 			extractor.setDataSource("src/test/resources/datasource.xls");
 			loader.setDataDestination("src/test/resources/transdatasource.xls");
-			loader.setDatasetTransformer(transformer);
+			loader.setDataTransformer(transformer);
 			loader.addDatasets(extractor.getDatasets());	
 			loader.save();
-			extractor = new ExcelExtractEngine();
+			extractor = new ExcelExtractor();
 			extractor.setDataSource("src/test/resources/transdatasource.xls");
 			transDatasets = extractor.getDatasets();
 		} catch (DataOutdoorException e) {
@@ -83,7 +78,7 @@ public class TestDataTransformation {
 		}
 
 		@Override
-		public LinkedHashMap<String, Object> transformDataModel(LinkedHashMap<String, Object> transformedDataset) {
+		public LinkedHashMap<String, Object> transformDataset(LinkedHashMap<String, Object> transformedDataset) {
 			transformedDataset.remove("POPULATION");
 			Double val = (Double) transformedDataset.get("AREA KM2");
 			val = val * 2;

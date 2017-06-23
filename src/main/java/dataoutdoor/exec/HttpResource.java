@@ -10,8 +10,8 @@ import javax.ws.rs.core.MediaType;
 
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.DataOutdoorUtils;
-import dataoutdoor.contract.DataExtractEngine;
-import dataoutdoor.extractors.ExcelExtractEngine;
+import dataoutdoor.contract.DataExtractorEngine;
+import dataoutdoor.extractor.ExcelExtractor;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -35,7 +35,7 @@ public class HttpResource {
     	String ret = "";
     	
     	LinkedHashMap<String, Object> dataset = null;
-		DataExtractEngine engine = new ExcelExtractEngine();
+		DataExtractorEngine engine = new ExcelExtractor();
 		boolean exceptionThrown = false;
 		
 		try {

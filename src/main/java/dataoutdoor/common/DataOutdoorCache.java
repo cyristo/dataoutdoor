@@ -1,7 +1,6 @@
 package dataoutdoor.common;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 

@@ -13,10 +13,10 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import dataoutdoor.common.DataOutdoorException;
-import dataoutdoor.contract.DataExtractEngine;
-import dataoutdoor.contract.DataLoadEngine;
-import dataoutdoor.extractors.ExcelExtractEngine;
-import dataoutdoor.loaders.ExcelLoadEngine;
+import dataoutdoor.contract.DataExtractorEngine;
+import dataoutdoor.contract.DataLoaderEngine;
+import dataoutdoor.extractor.ExcelExtractor;
+import dataoutdoor.loader.ExcelLoader;
 
 
 public class TestExcelDataLoader {
@@ -26,7 +26,7 @@ public class TestExcelDataLoader {
 		
 		Date date = new Date();
 		boolean exceptionThrown = false;
-		DataLoadEngine engine = new ExcelLoadEngine();
+		DataLoaderEngine engine = new ExcelLoader();
 		
 		try {
 			engine.setDataDestination("src/test/resources/datadest.xls");
@@ -57,8 +57,8 @@ public class TestExcelDataLoader {
 	public synchronized void should_add_dataset_to_a_category() {
 		
 		boolean exceptionThrown = false;
-		DataLoadEngine loadEngine = new ExcelLoadEngine();
-		DataExtractEngine extractEngine = new ExcelExtractEngine();
+		DataLoaderEngine loadEngine = new ExcelLoader();
+		DataExtractorEngine extractEngine = new ExcelExtractor();
 	
 		LinkedHashMap<String, Object> dataset1 = new LinkedHashMap<String, Object>();
 		dataset1.put("COL 1","STRING 1");
@@ -109,8 +109,8 @@ public class TestExcelDataLoader {
 	public synchronized void should_add_datasets_to_a_category() {
 		
 		boolean exceptionThrown = false;
-		DataLoadEngine loadEngine = new ExcelLoadEngine();
-		DataExtractEngine extractEngine = new ExcelExtractEngine();
+		DataLoaderEngine loadEngine = new ExcelLoader();
+		DataExtractorEngine extractEngine = new ExcelExtractor();
 	
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> datasets = new LinkedHashMap<Integer, LinkedHashMap<String, Object>>();
 		

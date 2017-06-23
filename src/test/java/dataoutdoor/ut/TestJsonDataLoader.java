@@ -12,8 +12,8 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import dataoutdoor.common.DataOutdoorUtils;
-import dataoutdoor.contract.DataLoadEngine;
-import dataoutdoor.loaders.JsonLoadEngine;
+import dataoutdoor.contract.DataLoaderEngine;
+import dataoutdoor.loader.JsonLoader;
 
 public class TestJsonDataLoader {
 
@@ -24,7 +24,7 @@ public class TestJsonDataLoader {
 	public synchronized void should_add_datasets_to_a_category() {
 		
 		boolean exceptionThrown = false;
-		DataLoadEngine loadEngine = new JsonLoadEngine();
+		DataLoaderEngine loadEngine = new JsonLoader();
 	
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> datasets = new LinkedHashMap<Integer, LinkedHashMap<String, Object>>();
 		

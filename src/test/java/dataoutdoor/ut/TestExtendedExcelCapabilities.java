@@ -2,21 +2,19 @@ package dataoutdoor.ut;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import dataoutdoor.common.DataOutdoorException;
-import dataoutdoor.contract.DataExtractEngine;
-import dataoutdoor.extractors.ExcelExtractEngine;
-import dataoutdoor.extractors.MultipleExcelExtractEngine;
+import dataoutdoor.extractor.ExcelExtractor;
+import dataoutdoor.extractor.MultipleExcelExtractor;
 
 public class TestExtendedExcelCapabilities {
 
@@ -32,7 +30,7 @@ public class TestExtendedExcelCapabilities {
 		extenstions[1] = "xlsx";
 		Collection<File> files = FileUtils.listFiles(new File("src/test/resources/multiple"), extenstions, false);
 
-		MultipleExcelExtractEngine engine = new MultipleExcelExtractEngine();
+		MultipleExcelExtractor engine = new MultipleExcelExtractor();
 		Collection<Object> cellList = new ArrayList<Object>();
 		Collection<Object[]> datatab = new ArrayList<Object[]>();
 		try {
@@ -57,7 +55,7 @@ public class TestExtendedExcelCapabilities {
 	public void should_set_the_row_to_be_considered_as_header() {
 		boolean exceptionThrown = false;
 
-		ExcelExtractEngine engine = new ExcelExtractEngine();
+		ExcelExtractor engine = new ExcelExtractor();
 		LinkedHashMap<String, Object> dataset1 = null;
 		LinkedHashMap<String, Object> dataset2 = null;
 		Object cell = null;
@@ -105,7 +103,7 @@ public class TestExtendedExcelCapabilities {
 	public void should_get_a_selected_area() {
 		boolean exceptionThrown = false;
 
-		ExcelExtractEngine engine = new ExcelExtractEngine();
+		ExcelExtractor engine = new ExcelExtractor();
 		Collection<Object[]> datatab = null;
 
 		try {

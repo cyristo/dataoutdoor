@@ -6,9 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import dataoutdoor.common.DataOutdoorException;
 import dataoutdoor.common.DataOutdoorUtils;
-import dataoutdoor.contract.DataExtractEngine;
-import dataoutdoor.extractors.ExcelExtractEngine;
-import dataoutdoor.loaders.JsonLoadEngine;
+import dataoutdoor.contract.DataExtractorEngine;
+import dataoutdoor.extractor.ExcelExtractor;
+import dataoutdoor.loader.JsonLoader;
 
 public class CmdRunner {
 
@@ -43,8 +43,8 @@ public class CmdRunner {
 
 
 		LinkedHashMap<String, Object> dataset = null;
-		DataExtractEngine extractor = new ExcelExtractEngine();
-		JsonLoadEngine loader = new JsonLoadEngine();
+		DataExtractorEngine extractor = new ExcelExtractor();
+		JsonLoader loader = new JsonLoader();
 		boolean exceptionThrown = false;
 
 		try {
